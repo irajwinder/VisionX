@@ -5,6 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -19,10 +20,39 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="p2p-58-LcR"/>
+                    <connections>
+                        <segue destination="6ZW-zF-fm8" kind="show" id="YjS-8I-hQe"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1874.0458015267175" y="3.5211267605633805"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="k0k-lJ-BCQ">
+            <objects>
+                <viewController id="6ZW-zF-fm8" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="D3r-Tm-3Mh">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="videos" translatesAutoresizingMaskIntoConstraints="NO" id="ioc-b8-A43">
+                                <rect key="frame" x="0.0" y="103" width="393" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ioc-b8-A43" id="jUb-ML-o3s">
+                                    <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="att-4B-RWM"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="cLT-BK-bfw"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ir0-sR-h4V" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2688" y="4"/>
         </scene>
         <!--ImageVC-->
         <scene sceneID="zzD-0n-woi">
@@ -31,14 +61,71 @@
                     <view key="view" contentMode="scaleToFill" id="0uX-Lm-dwH">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="8vw-ZS-PQf">
+                                <rect key="frame" x="20" y="103" width="353" height="32"/>
+                                <segments>
+                                    <segment title="Landscape"/>
+                                    <segment title="Portrait"/>
+                                    <segment title="Square"/>
+                                </segments>
+                            </segmentedControl>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="nsB-qW-YFs"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="8vw-ZS-PQf" firstAttribute="leading" secondItem="nsB-qW-YFs" secondAttribute="leading" constant="20" id="9Fk-rO-RSi"/>
+                            <constraint firstItem="nsB-qW-YFs" firstAttribute="trailing" secondItem="8vw-ZS-PQf" secondAttribute="trailing" constant="20" id="EKF-nB-CxB"/>
+                            <constraint firstItem="8vw-ZS-PQf" firstAttribute="top" secondItem="nsB-qW-YFs" secondAttribute="top" id="Seg-71-vwb"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="0Ia-uf-6Yc"/>
+                    <connections>
+                        <segue destination="Eqh-kd-uKn" kind="show" id="XjM-gR-LaM"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4zz-2z-MRF" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1900" y="-806.33802816901414"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="sXI-4U-aNc">
+            <objects>
+                <viewController id="Eqh-kd-uKn" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="fFQ-BP-Ajh">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="VH7-S5-Zwg">
+                                <rect key="frame" x="0.0" y="117" width="203" height="134"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="z7u-sj-yf1">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="images" id="WWK-Lt-vwn">
+                                        <rect key="frame" x="37.666666666666664" y="0.0" width="128" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="1Ig-Kp-6b2">
+                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="hVr-H8-I9E"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="dZi-gF-s02"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="taP-l8-LPh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2687.7862595419847" y="-806.33802816901414"/>
         </scene>
         <!--Videos-->
         <scene sceneID="AoZ-Tl-MhV">

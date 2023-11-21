@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 //Singleton Class
 class DataManager: NSObject {

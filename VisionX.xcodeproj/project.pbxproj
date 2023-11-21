@@ -19,6 +19,7 @@
 		A21432062B0C565200DE8DE3 /* VideoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21432052B0C565200DE8DE3 /* VideoVC.swift */; };
 		A214320A2B0CE4A600DE8DE3 /* FileManagerClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21432092B0CE4A600DE8DE3 /* FileManagerClass.swift */; };
 		A214320C2B0CE52F00DE8DE3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A214320B2B0CE52F00DE8DE3 /* DataManager.swift */; };
+		A21432102B0CE76400DE8DE3 /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A214320F2B0CE76400DE8DE3 /* ImageModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		A21432052B0C565200DE8DE3 /* VideoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoVC.swift; sourceTree = "<group>"; };
 		A21432092B0CE4A600DE8DE3 /* FileManagerClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerClass.swift; sourceTree = "<group>"; };
 		A214320B2B0CE52F00DE8DE3 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
+		A214320F2B0CE76400DE8DE3 /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 				A21432072B0CE47200DE8DE3 /* Utility */,
 				A21432032B0C55F700DE8DE3 /* ViewModel */,
 				A214320D2B0CE6BA00DE8DE3 /* View */,
+				A214320E2B0CE73100DE8DE3 /* Model */,
 				A21431DF2B0C52CF00DE8DE3 /* AppDelegate.swift */,
 				A21431E12B0C52CF00DE8DE3 /* SceneDelegate.swift */,
 				A21431EB2B0C52D000DE8DE3 /* Assets.xcassets */,
@@ -115,6 +118,14 @@
 				A21431E52B0C52CF00DE8DE3 /* Main.storyboard */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		A214320E2B0CE73100DE8DE3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A214320F2B0CE76400DE8DE3 /* ImageModel.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -189,6 +200,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A21431EA2B0C52CF00DE8DE3 /* VisionX.xcdatamodeld in Sources */,
+				A21432102B0CE76400DE8DE3 /* ImageModel.swift in Sources */,
 				A21431E42B0C52CF00DE8DE3 /* ImageVC.swift in Sources */,
 				A21431E02B0C52CF00DE8DE3 /* AppDelegate.swift in Sources */,
 				A21432012B0C555200DE8DE3 /* Bookmark+CoreDataProperties.swift in Sources */,
