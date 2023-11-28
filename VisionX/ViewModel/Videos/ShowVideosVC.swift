@@ -9,9 +9,12 @@ import UIKit
 
 class ShowVideosVC: UIViewController {
 
+    var videos: [Video] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        print(videos)
        
     }
 

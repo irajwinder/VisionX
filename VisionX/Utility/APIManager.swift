@@ -28,6 +28,18 @@ class APIManager: NSObject {
             completion(nil)
         }
     }
+    
+    // Decode Video response
+    func decodeVideoResponse(data: Data, completion: @escaping (VideoResponse?) -> Void) {
+        do {
+            let decoder = JSONDecoder()
+            let videoSearchResponse = try decoder.decode(VideoResponse.self, from: data)
+            completion(videoSearchResponse)
+        } catch {
+            print("Error decoding JSON: \(error.localizedDescription)")
+            completion(nil)
+        }
+    }
 }
 
 let apiManagerInstance = APIManager.sharedInstance

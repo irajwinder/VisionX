@@ -11,6 +11,8 @@ class BookmarkVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationItem.title = "Bookmark"
 
     }
 }

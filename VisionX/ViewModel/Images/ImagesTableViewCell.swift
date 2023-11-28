@@ -8,9 +8,5 @@
 import UIKit
 
 class ImagesTableViewCell: UITableViewCell {
-    
     @IBOutlet weak var ImagesCell: UIImageView!
-    
-    
-    
 }

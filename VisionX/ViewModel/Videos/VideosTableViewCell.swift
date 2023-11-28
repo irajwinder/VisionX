@@ -8,8 +8,5 @@
 import UIKit
 
 class VideosTableViewCell: UITableViewCell {
-
-    @IBOutlet weak var VideoImages: UIImageView!
-    
-
+    @IBOutlet weak var VideosCell: UIImageView!
 }

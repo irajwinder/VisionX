@@ -16,7 +16,7 @@ class SearchImageVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = "Search Pictures"
+        navigationItem.title = "Search Photos"
         
         let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
         print(paths[0])
@@ -26,7 +26,6 @@ class SearchImageVC: UIViewController {
     }
     
     @IBAction func sliderValueChanged(_ sender: Any) {
-        
         numberLabel.text = "\(Int(perpageSlider.value))"
     }
     
