@@ -20,32 +20,59 @@ class FileManagerClass: NSObject {
         super.init()
     }
     
-    func saveImageToFileManager(_ uiImage: UIImage, folderName: String, fileName: String) -> String? {
-        guard let imageData = uiImage.jpegData(compressionQuality: 0.5) else {
-            return nil
+    func saveImage(photo: Photo, completion: @escaping (String?) -> Void) {
+        // Extract the photo ID as a string
+        let photoID = String(photo.id)
+
+        // Checks if the URL is valid
+        guard let url = URL(string: photo.src.original) else {
+            print("Invalid URL")
+            completion(nil)
+            return
         }
-        //UUID for Event and photo
-        let relativeURL  = "\(folderName)/\(fileName)"
-        
-        do {
-            // Get the documents directory URL
-            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-            let fileURL = documentsDirectory.appendingPathComponent(relativeURL)
-            
-            // Create the necessary directory structure if it doesn't exist
-            try FileManager.default.createDirectory(at: fileURL.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
-            
-            // Write the image data to the file at the specified URL
-            try imageData.write(to: fileURL)
-            print("Image Location: \(fileURL)")
-            return relativeURL
-            
-        } catch {
-            // Print an error message if any issues occur during the image-saving process
-            print("Error saving image:", error.localizedDescription)
-            return nil
+
+        // Creates a data task using URLSession to fetch data from the given URL
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            // Checks if there is valid data and no error
+            if let data = data, error == nil, let uiImage = UIImage(data: data) {
+                // folder name and file name based on photo ID
+                let folderName = "SearchedImages"
+                let fileName = "\(photoID).jpg"
+                let relativePath = "\(folderName)/\(fileName)"
+
+                // Checks if the image data can be compressed to JPEG format
+                guard let imageData = uiImage.jpegData(compressionQuality: 0.5) else {
+                    completion(nil)
+                    return
+                }
+
+                // Get the documents directory URL
+                let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+                let fileURL = documentsDirectory.appendingPathComponent(relativePath)
+
+                // Create the necessary directory structure if it doesn't exist
+                do {
+                    try FileManager.default.createDirectory(at: fileURL.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
+
+                    // Write the image data to the file at the specified URL
+                    try imageData.write(to: fileURL)
+                    completion(relativePath)
+                } catch {
+                    // Print an error message if any issues occur during the image-saving process
+                    print("Error saving image:", error.localizedDescription)
+                    completion(nil)
+                }
+            } else if let error = error {
+                // Print an error message if there is an issue with the data task
+                print("Error downloading image: \(error)")
+                completion(nil)
+            }
         }
+        // Resume the data task to initiate the download
+        task.resume()
     }
+
+
     
     func loadImageFromFileManager(relativePath: String) -> UIImage {
         // Construct the local file URL by appending the relative path to the documents directory
