@@ -45,44 +45,36 @@ class SearchImageVC: UIViewController {
     
     @IBAction func searchImages(_ sender: Any) {
         guard let query = imageText.text, Validation.isValidName(query) else {
-               Validation.showAlert(on: self, with: "Invalid Name", message: "Please enter a valid name.")
-               return
-           }
+                Validation.showAlert(on: self, with: "Invalid Name", message: "Please enter a valid name.")
+                return
+            }
 
-           apiManagerInstance.searchPhotos(query: query, perPage: 5) { response in
-               guard let response = response else {
-                   return
-               }
+            apiManagerInstance.searchPhotos(query: query, perPage: 5) { response in
+                guard let response = response else {
+                    return
+                }
 
-               // Create a dispatch group
-               let dispatchGroup = DispatchGroup()
+                // Create an empty array to store relative paths
+                var relativePaths: [String] = []
 
-               // Create an empty array to store relative paths
-               var relativePaths: [String] = []
+                // Iterate through photos, save to file manager, and update the photos array
+                for photo in response.photos {
+                    fileManagerClassInstance.saveImage(photo: photo) { relativePath in
+                        // Append the relative path to the array
+                        if let relativePath = relativePath {
+                            relativePaths.append(relativePath)
+                        }
 
-               // Iterate through photos, save to file manager, and update the photos array
-               for photo in response.photos {
-                   // Enter the dispatch group before starting the asynchronous task
-                   dispatchGroup.enter()
-
-                   fileManagerClassInstance.saveImage(photo: photo) { relativePath in
-                       // Append the relative path to the array
-                       if let relativePath = relativePath {
-                           relativePaths.append(relativePath)
-                       }
-
-                       // Leave the dispatch group when the asynchronous task is completed
-                       dispatchGroup.leave()
-                   }
-               }
-
-               // Notify when all tasks in the dispatch group are completed
-               dispatchGroup.notify(queue: .main) {
-                   //Navigate to the next view controller
-                   let showImagesVC = self.storyboard?.instantiateViewController(withIdentifier: "ShowImagesVC") as! ShowImagesVC
-                   showImagesVC.photos = relativePaths
-                   self.navigationController?.pushViewController(showImagesVC, animated: true)
-               }
-           }
+                        // Check if all relative paths are collected before navigating to the next view controller
+                        if relativePaths.count == response.photos.count {
+                            DispatchQueue.main.async {
+                                let showImagesVC = self.storyboard?.instantiateViewController(withIdentifier: "ShowImagesVC") as! ShowImagesVC
+                                showImagesVC.photos = relativePaths
+                                self.navigationController?.pushViewController(showImagesVC, animated: true)
+                            }
+                        }
+                    }
+                }
+            }
     }
 }
