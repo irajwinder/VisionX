@@ -29,7 +29,7 @@ class ShowImagesVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImagesCell", for: indexPath) as! ImagesCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImagesCell", for: indexPath) as! ImageCollectionViewCell
         
         let photo = photos[indexPath.row]
       
