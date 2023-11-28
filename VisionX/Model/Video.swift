@@ -12,25 +12,9 @@ struct Video: Codable {
     let duration: Int
     let url: String
     let image: String
-   // let videoFiles: [VideoFile]
-//    let videoPictures: [VideoPicture]
 }
 
-//struct VideoFile: Codable {
-//    let id: Int
-//    let quality: String
-//    let fileType: String
-//    let width: Int
-//    let height: Int
-//    let fps: Float
-//    let link: String
-//}
 
-//struct VideoPicture: Codable {
-//    let id: Int
-//    let nr: Int
-//    let picture: String
-//}
 
 struct VideoResponse: Codable {
     let page: Int

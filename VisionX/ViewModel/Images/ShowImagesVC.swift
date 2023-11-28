@@ -11,7 +11,7 @@ class ShowImagesVC: UIViewController, UICollectionViewDataSource, UICollectionVi
     
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var photos: [String] = []
+    var photos: [Photo] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,22 +20,25 @@ class ShowImagesVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         
         collectionView.delegate = self
         collectionView.dataSource = self
-        
-        print("relativePaths ---> \(photos)")
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-            return photos.count
-        }
+        return photos.count
+    }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImagesCell", for: indexPath) as! ImageCollectionViewCell
-        
         let photo = photos[indexPath.row]
-      
-        let image = fileManagerClassInstance.loadImageFromFileManager(relativePath: photo)
-        cell.Images.image = image
         
+        // Download the image
+        if let imageUrl = URL(string: photo.src.tiny) {
+            networkManagerInstance.downloadImage(from: imageUrl) { image in
+                // Update the cell's image on the main thread
+                DispatchQueue.main.async {
+                    cell.Images.image = image
+                }
+            }
+        }
         return cell
     }
 }
