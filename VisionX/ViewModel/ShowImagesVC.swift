@@ -20,7 +20,7 @@ class ShowImagesVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.reloadData()
+        
         print("relativePaths ---> \(photos)")
     }
     
@@ -37,10 +37,5 @@ class ShowImagesVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         cell.Images.image = image
         
         return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        // Set the size of each cell
-        return CGSize(width: collectionView.frame.size.width / 2, height: collectionView.frame.size.width / 2)
     }
 }

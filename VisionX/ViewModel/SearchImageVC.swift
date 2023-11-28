@@ -54,7 +54,7 @@ class SearchImageVC: UIViewController {
                     return
                 }
 
-                // Create an empty array to store relative paths
+                //empty array to store relative paths
                 var relativePaths: [String] = []
 
                 // Iterate through photos, save to file manager, and update the photos array
