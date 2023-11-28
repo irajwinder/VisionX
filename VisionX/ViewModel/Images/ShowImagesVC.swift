@@ -7,9 +7,9 @@
 
 import UIKit
 
-class ShowImagesVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate  {
+class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate  {
     
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var tableView: UITableView!
     
     var photos: [Photo] = []
     
@@ -18,16 +18,21 @@ class ShowImagesVC: UIViewController, UICollectionViewDataSource, UICollectionVi
         
         navigationItem.title = "Images"
         
-        collectionView.delegate = self
-        collectionView.dataSource = self
+        tableView.dataSource = self
+        tableView.delegate = self
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return photos.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImagesCell", for: indexPath) as! ImageCollectionViewCell
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 300
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ImageCell", for: indexPath) as! ImagesTableViewCell
         let photo = photos[indexPath.row]
         
         // Download the image
@@ -35,7 +40,7 @@ class ShowImagesVC: UIViewController, UICollectionViewDataSource, UICollectionVi
             networkManagerInstance.downloadImage(from: imageUrl) { image in
                 // Update the cell's image on the main thread
                 DispatchQueue.main.async {
-                    cell.Images.image = image
+                    cell.ImagesCell.image = image
                 }
             }
         }
