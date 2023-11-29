@@ -18,10 +18,6 @@ struct Video: Codable {
 
 struct VideoFile: Codable {
     let id: Int
-    let quality: String
-    let file_type: String
-    let width: Int
-    let height: Int
     let fps: Float
     let link: String
 }
