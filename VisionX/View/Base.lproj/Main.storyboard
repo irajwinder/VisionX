@@ -355,6 +355,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="48O-3k-QkZ"/>
+                    <connections>
+                        <outlet property="videoTableView" destination="eGp-jk-mur" id="qRX-T4-P1y"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sRR-1g-QxU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

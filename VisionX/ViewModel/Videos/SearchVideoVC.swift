@@ -42,7 +42,7 @@ class SearchVideoVC: UIViewController {
                 return
             }
             DispatchQueue.main.async {
-                let showImagesVC = self.storyboard?.instantiateViewController(withIdentifier: "ShowImagesVC") as! ShowVideosVC
+                let showImagesVC = self.storyboard?.instantiateViewController(withIdentifier: "ShowVideosVC") as! ShowVideosVC
                 showImagesVC.videos = response.videos
                 self.navigationController?.pushViewController(showImagesVC, animated: true)
             }
