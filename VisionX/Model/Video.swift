@@ -13,19 +13,12 @@ struct Video: Codable {
     let url: String
     let image: String
     let video_files: [VideoFile]
-    let video_pictures: [VideoPicture]
 }
 
 struct VideoFile: Codable {
     let id: Int
     let fps: Float
     let link: String
-}
-
-struct VideoPicture: Codable {
-    let id: Int
-    let nr: Int
-    let picture: String
 }
 
 struct VideoResponse: Codable {

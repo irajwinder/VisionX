@@ -36,21 +36,16 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         // Get the video data for the current row
         let video = videos[indexPath.row]
         
-        // Loop through video pictures and download images asynchronously
-        for videoPicture in video.video_pictures {
-            let pictureLink = videoPicture.picture
-            
-            // Download the image
-            if let imageUrl = URL(string: pictureLink) {
-                networkManagerInstance.downloadImage(from: imageUrl) { videoData in
-                    // Check if imageData is not nil
-                    if let videoData = videoData {
-                        // Convert data to UIImage
-                        if let videoImage = UIImage(data: videoData) {
-                            // Update the cell's image on the main thread
-                            DispatchQueue.main.async {
-                                cell.VideosCell.image = videoImage
-                            }
+        // Download the image
+        if let imageUrl = URL(string: video.image) {
+            networkManagerInstance.downloadImage(from: imageUrl) { imageData in
+                // Check if imageData is not nil
+                if let imageData = imageData {
+                    // Convert data to UIImage
+                    if let image = UIImage(data: imageData) {
+                        // Update the cell's image on the main thread
+                        DispatchQueue.main.async {
+                            cell.VideosCell.image = image
                         }
                     }
                 }
@@ -61,7 +56,8 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedVideo = videos[indexPath.row]
-        // Loop through video files and play the first valid video URL
+        
+        // Loop through video files
         for videoFile in selectedVideo.video_files {
             let videoURL = URL(string: videoFile.link)
             
