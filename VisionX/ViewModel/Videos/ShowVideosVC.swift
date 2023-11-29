@@ -31,29 +31,6 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         return 300
     }
     
-    //    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    //        let cell = tableView.dequeueReusableCell(withIdentifier: "VideoCell", for: indexPath) as! VideosTableViewCell
-    //        // Get the video data for the current row
-    //        let video = videos[indexPath.row]
-    //
-    //        // Download the image
-    //        if let imageUrl = URL(string: video.image) {
-    //            networkManagerInstance.downloadImage(from: imageUrl) { imageData in
-    //                // Check if imageData is not nil
-    //                if let imageData = imageData {
-    //                    // Convert data to UIImage
-    //                    if let image = UIImage(data: imageData) {
-    //                        // Update the cell's image on the main thread
-    //                        DispatchQueue.main.async {
-    //                            cell.VideosCell.image = image
-    //                        }
-    //                    }
-    //                }
-    //            }
-    //        }
-    //        return cell
-    //    }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "VideoCell", for: indexPath) as! VideosTableViewCell
         // Get the video data for the current row

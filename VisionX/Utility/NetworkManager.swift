@@ -75,6 +75,7 @@ class NetworkManager : NSObject {
                 completion(nil)
                 return
             }
+            print(data)
             // Decode JSON response
             apiManagerInstance.decodeVideoResponse(data: data, completion: completion)
         }
