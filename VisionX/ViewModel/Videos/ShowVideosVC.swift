@@ -9,14 +9,14 @@ import UIKit
 import AVKit
 
 class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
+    
     @IBOutlet weak var videoTableView: UITableView!
     
     var videos: [Video] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         navigationItem.title = "Videos"
         
         videoTableView.dataSource = self
@@ -60,25 +60,23 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            let selectedVideo = videos[indexPath.row]
-
-            // Loop through video files and play the first valid video URL
-            for videoFile in selectedVideo.video_files {
-                let videoURL = URL(string: videoFile.link)
-
-                // Check if the videoURL is valid
-                if let videoURL = videoURL {
-                    // Create an AVPlayer with the video URL
-                    let player = AVPlayer(url: videoURL)
-                    let playerViewController = AVPlayerViewController()
-                    playerViewController.player = player
-
-                    // Present the AVPlayerViewController and start playing the video
-                    present(playerViewController, animated: true) {
-                        player.play()
-                    }
+        let selectedVideo = videos[indexPath.row]
+        // Loop through video files and play the first valid video URL
+        for videoFile in selectedVideo.video_files {
+            let videoURL = URL(string: videoFile.link)
+            
+            // Check if the videoURL is valid
+            if let videoURL = videoURL {
+                // Create an AVPlayer with the video URL
+                let player = AVPlayer(url: videoURL)
+                let playerViewController = AVPlayerViewController()
+                playerViewController.player = player
+                
+                // Present the AVPlayerViewController and start playing the video
+                present(playerViewController, animated: true) {
+                    player.play()
                 }
             }
         }
-
+    }
 }
