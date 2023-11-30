@@ -71,8 +71,8 @@ class FileManagerClass: NSObject {
             return nil
         }
     }
-
-    func loadImageFromFileManager(relativePath: String) -> UIImage {
+    
+    func loadImageDataFromFileManager(relativePath: String) -> Data? {
         // Construct the local file URL by appending the relative path to the documents directory
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let localFileURL = documentsDirectory.appendingPathComponent(relativePath)
@@ -80,30 +80,37 @@ class FileManagerClass: NSObject {
         do {
             // Read image data from the local file
             let imageData = try Data(contentsOf: localFileURL)
-            if let uiImage = UIImage(data: imageData) {
-                return uiImage
-            } else {
-                print("Failed to create UIImage from data")
-                return UIImage(systemName: "person") ?? UIImage()
-            }
+            return imageData
         } catch {
-            print("Error loading image:", error.localizedDescription)
-            return UIImage(systemName: "person") ?? UIImage()
+            print("Error loading image data:", error.localizedDescription)
+            return nil
+        }
+    }
+    
+    func loadURLFromFileManager(relativePath: String) -> URL? {
+        // Construct the local file URL by appending the relative path to the documents directory
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let localFileURL = documentsDirectory.appendingPathComponent(relativePath)
+        
+        // Check if the file exists before returning the URL
+        if FileManager.default.fileExists(atPath: localFileURL.path) {
+            return localFileURL
+        } else {
+            return nil
         }
     }
     
     func deleteImageFromFileManager(relativePath: String) {
-            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-            let localFileURL = documentsDirectory.appendingPathComponent(relativePath)
-
-            do {
-                try FileManager.default.removeItem(at: localFileURL)
-                print("Image deleted from file manager:", localFileURL)
-            } catch {
-                print("Error deleting image from file manager:", error.localizedDescription)
-            }
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let localFileURL = documentsDirectory.appendingPathComponent(relativePath)
+        
+        do {
+            try FileManager.default.removeItem(at: localFileURL)
+            print("Image deleted from file manager:", localFileURL)
+        } catch {
+            print("Error deleting image from file manager:", error.localizedDescription)
         }
-    
+    }
 }
 
 let fileManagerClassInstance = FileManagerClass.sharedInstance

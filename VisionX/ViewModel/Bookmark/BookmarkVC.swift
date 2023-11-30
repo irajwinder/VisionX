@@ -6,12 +6,25 @@
 //
 
 import UIKit
+import AVKit
 
 class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var bookmarkTableView: UITableView!
     
     var bookmarks: [Bookmark] = []
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Fetch bookmarks from Core Data
+        let fetch = datamanagerInstance.fetchBookmark()
+        self.bookmarks = fetch
+        
+        // Reload the table view data
+        bookmarkTableView.reloadData()
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,10 +33,6 @@ class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         
         bookmarkTableView.dataSource = self
         bookmarkTableView.delegate = self
-        
-        // Fetch bookmarks from Core Data
-        let fetch = datamanagerInstance.fetchBookmark()
-        self.bookmarks = fetch
     }
     
     
@@ -36,13 +45,36 @@ class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         let bookmark = bookmarks[indexPath.row]
         
         // Load bookmarked image
-        let image = fileManagerClassInstance.loadImageFromFileManager(relativePath: bookmark.bookmarkURL ?? "")
-        cell.BookmarksCell.image = image
+        if let imageData = fileManagerClassInstance.loadImageDataFromFileManager(relativePath: bookmark.bookmarkURL ?? "") {
+            let uiImage = UIImage(data: imageData)
+            cell.BookmarksCell.image = uiImage
+        } else {
+            print("Failed to create UIImage from data")
+        }
         
         //remove from bookmark
         cell.removeFromBookmark.tag = indexPath.row
         cell.removeFromBookmark.addTarget(self, action: #selector(removeFromBookmark), for: .touchUpInside)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedVideo = bookmarks[indexPath.row]
+        
+        guard let videoURL = fileManagerClassInstance.loadURLFromFileManager(relativePath: selectedVideo.bookmarkURL ?? "") else {
+            print("Video URL file not found.")
+            return
+        }
+        
+        // Create an AVPlayer with the video URL
+        let player = AVPlayer(url: videoURL)
+        let playerViewController = AVPlayerViewController()
+        playerViewController.player = player
+        
+        // Present the AVPlayerViewController and start playing the video
+        present(playerViewController, animated: true) {
+            player.play()
+        }
     }
     
     @objc func removeFromBookmark(sender: UIButton) {

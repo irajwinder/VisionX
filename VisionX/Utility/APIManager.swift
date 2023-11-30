@@ -18,26 +18,26 @@ class APIManager: NSObject {
     }
     
     // Decode Photo response
-    func decodePhotoResponse(data: Data, completion: @escaping (PhotoResponse?) -> Void) {
+    func decodePhotoResponse(data: Data) -> PhotoResponse? {
         do {
             let decoder = JSONDecoder()
             let photoSearchResponse = try decoder.decode(PhotoResponse.self, from: data)
-            completion(photoSearchResponse)
+            return photoSearchResponse
         } catch {
             print("Error decoding JSON: \(error.localizedDescription)")
-            completion(nil)
+            return nil
         }
     }
     
     // Decode Video response
-    func decodeVideoResponse(data: Data, completion: @escaping (VideoResponse?) -> Void) {
+    func decodeVideoResponse(data: Data) -> VideoResponse? {
         do {
             let decoder = JSONDecoder()
             let videoSearchResponse = try decoder.decode(VideoResponse.self, from: data)
-            completion(videoSearchResponse)
+            return videoSearchResponse
         } catch {
             print("Error decoding JSON: \(error.localizedDescription)")
-            completion(nil)
+            return nil
         }
     }
 }

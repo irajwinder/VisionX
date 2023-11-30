@@ -45,7 +45,8 @@ class NetworkManager : NSObject {
                 return
             }
             // Decode JSON response
-            apiManagerInstance.decodePhotoResponse(data: data, completion: completion)
+            let photoResponse = apiManagerInstance.decodePhotoResponse(data: data)
+            completion(photoResponse)
         }
         task.resume()
     }
@@ -76,7 +77,8 @@ class NetworkManager : NSObject {
                 return
             }
             // Decode JSON response
-            apiManagerInstance.decodeVideoResponse(data: data, completion: completion)
+            let videoResponse = apiManagerInstance.decodeVideoResponse(data: data)
+            completion(videoResponse)
         }
         task.resume()
     }
