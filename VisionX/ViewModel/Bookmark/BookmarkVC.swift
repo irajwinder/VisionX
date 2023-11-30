@@ -59,8 +59,6 @@ class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         
         //Remove the bookmark from the local array
         bookmarks.remove(at: indexPath.row)
-        
-        //Reload the table view to reflect the changes
         bookmarkTableView.reloadData()
     }
 }
