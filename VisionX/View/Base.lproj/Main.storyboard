@@ -104,22 +104,33 @@
                                 <rect key="frame" x="0.0" y="103" width="393" height="749"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ImageCell" rowHeight="282" id="eeM-Oj-yeS" customClass="ImagesTableViewCell" customModule="VisionX" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="50" width="393" height="282"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ImageCell" rowHeight="170" id="eeM-Oj-yeS" customClass="ImagesTableViewCell" customModule="VisionX" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="170"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="eeM-Oj-yeS" id="8lP-UL-nUz">
-                                            <rect key="frame" x="0.0" y="0.0" width="393" height="282"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="170"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Iut-g9-bLh">
-                                                    <rect key="frame" x="10" y="10" width="373" height="262"/>
+                                                    <rect key="frame" x="2" y="10" width="304.66666666666669" height="150"/>
                                                 </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fp4-lK-AKO">
+                                                    <rect key="frame" x="316.66666666666669" y="21" width="46.333333333333314" height="128"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" image="bookmark" catalog="system"/>
+                                                    <connections>
+                                                        <action selector="imageBookmark:" destination="Eqh-kd-uKn" eventType="touchUpInside" id="fIh-F5-caW"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="Iut-g9-bLh" secondAttribute="bottom" constant="10" id="Vqi-Ot-SSz"/>
-                                                <constraint firstItem="Iut-g9-bLh" firstAttribute="leading" secondItem="8lP-UL-nUz" secondAttribute="leading" constant="10" id="d21-Hs-zPg"/>
-                                                <constraint firstItem="Iut-g9-bLh" firstAttribute="top" secondItem="8lP-UL-nUz" secondAttribute="top" constant="10" id="oHk-mA-unP"/>
-                                                <constraint firstAttribute="trailing" secondItem="Iut-g9-bLh" secondAttribute="trailing" constant="10" id="ukk-gw-4rf"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="fp4-lK-AKO" secondAttribute="bottom" constant="10" id="F5E-gM-s9V"/>
+                                                <constraint firstItem="fp4-lK-AKO" firstAttribute="top" secondItem="8lP-UL-nUz" secondAttribute="topMargin" constant="10" id="FRc-qB-KUK"/>
+                                                <constraint firstAttribute="bottom" secondItem="Iut-g9-bLh" secondAttribute="bottom" constant="10" id="JGv-hx-0Wm"/>
+                                                <constraint firstItem="Iut-g9-bLh" firstAttribute="top" secondItem="8lP-UL-nUz" secondAttribute="top" constant="10" id="Ofl-2a-WuG"/>
+                                                <constraint firstItem="Iut-g9-bLh" firstAttribute="leading" secondItem="8lP-UL-nUz" secondAttribute="leading" constant="2" id="RdN-kS-CeG"/>
+                                                <constraint firstItem="fp4-lK-AKO" firstAttribute="leading" secondItem="Iut-g9-bLh" secondAttribute="trailing" constant="10" id="vMo-Yh-sVt"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="fp4-lK-AKO" secondAttribute="trailing" constant="10" id="xpk-rW-jwE"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>

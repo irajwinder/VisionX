@@ -19,8 +19,8 @@ class DataManager: NSObject {
         super.init()
     }
 
-    // Save user data to CoreData
-    func bookmark(bookmarkURL: String) {
+    // Save Bookmark to CoreData
+    func saveBookmark(bookmarkURL: String) {
         // Obtains a reference to the AppDelegate
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
