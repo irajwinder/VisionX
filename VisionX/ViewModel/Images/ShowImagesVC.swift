@@ -22,31 +22,6 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         tableView.delegate = self
     }
     
-    @IBAction func imageBookmark(_ sender: UIButton) {
-        // Gets the index path of the cell containing the button
-        if let cell = sender.superview?.superview as? ImagesTableViewCell,
-           let indexPath = tableView.indexPath(for: cell) {
-            
-            // Get the corresponding photo
-            let photo = photos[indexPath.row]
-            
-            // Save the image using fileManagerClassInstance
-            fileManagerClassInstance.saveImage(photo: photo) { relativePath in
-                guard let relativePath = relativePath else {
-                    print("Error saving image to FileManager.")
-                    return
-                }
-                
-                // Save image link to CoreData
-                DispatchQueue.main.async {
-                    datamanagerInstance.saveBookmark(bookmarkURL: relativePath)
-                }
-            }
-        }
-        
-    }
-    
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return photos.count
     }
@@ -74,6 +49,36 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                 }
             }
         }
+        
+        cell.imageBookmark.tag = indexPath.row
+        cell.imageBookmark.addTarget(self, action: #selector(addBookmark), for: .touchUpInside)
+        
         return cell
+    }
+    
+    @objc func addBookmark(sender: UIButton) {
+        let indexPath = IndexPath(row: sender.tag, section: 0)
+        let selectedPhoto = photos[indexPath.row]
+        
+        // Download the image
+        if let imageUrl = URL(string: selectedPhoto.src.tiny) {
+            networkManagerInstance.downloadImage(from: imageUrl) { imageData in
+                // Check if imageData is not nil
+                if let imageData = imageData {
+                    // Save the image to the file manager
+                    if let relativePath = fileManagerClassInstance.saveImageToFileManager(imageData: imageData, photo: selectedPhoto) {
+                        // Save image link to CoreData
+                        DispatchQueue.main.async {
+                            datamanagerInstance.saveBookmark(bookmarkURL: relativePath)
+                            
+                            // Show alert on the main thread
+                            Validation.showAlert(on: self, with: "Success", message: "Image Bookmarked Successfully.")
+                        }
+                    } else {
+                        print("Error saving image to FileManager.")
+                    }
+                }
+            }
+        }
     }
 }

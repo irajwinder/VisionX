@@ -9,4 +9,5 @@ import UIKit
 
 class ImagesTableViewCell: UITableViewCell {
     @IBOutlet weak var ImagesCell: UIImageView!
+    @IBOutlet weak var imageBookmark: UIButton!
 }

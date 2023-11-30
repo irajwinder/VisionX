@@ -28,7 +28,7 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 300
+        return 170
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -56,6 +56,10 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                 }
             }
         }
+        
+        cell.videoBookmark.tag = indexPath.row
+        cell.videoBookmark.addTarget(self, action: #selector(addBookmark), for: .touchUpInside)
+        
         return cell
     }
     
@@ -76,6 +80,36 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                 // Present the AVPlayerViewController and start playing the video
                 present(playerViewController, animated: true) {
                     player.play()
+                }
+            }
+        }
+    }
+    
+    @objc func addBookmark(sender: UIButton) {
+        let indexPath = IndexPath(row: sender.tag, section: 0)
+        let selectedVideo = videos[indexPath.row]
+        
+        guard let firstVideoFile = selectedVideo.video_files.first else {
+            return
+        }
+
+        // Download the video
+        if let videoUrl = URL(string: firstVideoFile.link) {
+            networkManagerInstance.downloadImage(from: videoUrl) { videoData in
+                // Check if videoData is not nil
+                if let videoData = videoData {
+                    // Save the video to the file manager
+                    if let relativePath = fileManagerClassInstance.saveVideoToFileManager(videoData: videoData, video: selectedVideo) {
+                        // Save video link to CoreData
+                        DispatchQueue.main.async {
+                            datamanagerInstance.saveBookmark(bookmarkURL: relativePath)
+                            
+                            // Show alert on the main thread
+                            Validation.showAlert(on: self, with: "Success", message: "Video Bookmarked Successfully.")
+                        }
+                    } else {
+                        print("Error saving video to FileManager.")
+                    }
                 }
             }
         }

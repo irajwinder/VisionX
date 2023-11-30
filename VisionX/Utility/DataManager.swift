@@ -37,10 +37,27 @@ class DataManager: NSObject {
         do {
             // Attempting to save the changes made to the managed context
             try managedContext.save()
-            print("Bookmark data saved successfully.")
         } catch let error as NSError {
             // Informs the user that an error occurred while saving the data.
             print("Could not save. \(error), \(error.userInfo)")
+        }
+    }
+    
+    func fetchBookmark() -> [Bookmark] {
+        /// Obtains a reference to the AppDelegate
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return []
+        }
+        // Accessing the managed context from the persistent container
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        do {
+            // Fetch the bookmarks based on the fetch request
+            return try managedContext.fetch(Bookmark.fetchRequest())
+        } catch let error as NSError {
+            // Handle the error
+            print("Could not fetch. \(error), \(error.userInfo)")
+            return []
         }
     }
     
