@@ -52,9 +52,10 @@ class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         //Delete the corresponding file from the file manager
         if let bookmarkURL = selectedBookmark.bookmarkURL {
             fileManagerClassInstance.deleteImageFromFileManager(relativePath: bookmarkURL)
-            //Delete the bookmark entity from Core Data
-            datamanagerInstance.deleteEntity(selectedBookmark)
         }
+        
+        //Delete the bookmark entity from Core Data
+        datamanagerInstance.deleteEntity(selectedBookmark)
         
         //Remove the bookmark from the local array
         bookmarks.remove(at: indexPath.row)
