@@ -52,9 +52,6 @@ class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
             print("Failed to create UIImage from data")
         }
         
-        //remove from bookmark
-        cell.removeFromBookmark.tag = indexPath.row
-        cell.removeFromBookmark.addTarget(self, action: #selector(removeFromBookmark), for: .touchUpInside)
         return cell
     }
     
@@ -75,20 +72,29 @@ class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         }
     }
     
-    @objc func removeFromBookmark(sender: UIButton) {
-        let indexPath = IndexPath(row: sender.tag, section: 0)
-        let selectedBookmark = bookmarks[indexPath.row]
-        
-        //Delete the corresponding file from the file manager
-        if let bookmarkURL = selectedBookmark.imageURL {
-            fileManagerClassInstance.deleteImageFromFileManager(relativePath: bookmarkURL)
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            // Handle the deletion when the user swipes to delete
+            let selectedBookmark = bookmarks[indexPath.row]
+            
+            // Delete the corresponding image file from the file manager
+            if let imageURL = selectedBookmark.imageURL {
+                fileManagerClassInstance.deleteImageFromFileManager(relativePath: imageURL)
+            }
+            
+            // Delete the corresponding video file from the file manager
+            if let bookmarkVideoURL = selectedBookmark.videoURL, !bookmarkVideoURL.isEmpty {
+                fileManagerClassInstance.deleteImageFromFileManager(relativePath: bookmarkVideoURL)
+            }
+            
+            // Delete the bookmark entity from Core Data
+            datamanagerInstance.deleteEntity(selectedBookmark)
+            
+            // Remove the bookmark from the local array
+            bookmarks.remove(at: indexPath.row)
+            
+            // Update the table view
+            tableView.deleteRows(at: [indexPath], with: .fade)
         }
-        
-        //Delete the bookmark entity from Core Data
-        datamanagerInstance.deleteEntity(selectedBookmark)
-        
-        //Remove the bookmark from the local array
-        bookmarks.remove(at: indexPath.row)
-        bookmarkTableView.reloadData()
     }
 }

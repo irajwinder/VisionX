@@ -9,5 +9,4 @@ import UIKit
 
 class BookmarkTableViewCell: UITableViewCell {
     @IBOutlet weak var BookmarksCell: UIImageView!
-    @IBOutlet weak var removeFromBookmark: UIButton!
 }

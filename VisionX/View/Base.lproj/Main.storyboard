@@ -401,27 +401,18 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DAw-1s-8Gu">
-                                                    <rect key="frame" x="2" y="10" width="304.66666666666669" height="150"/>
+                                                    <rect key="frame" x="11" y="10" width="371" height="150"/>
                                                 </imageView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h0C-IM-4zR">
-                                                    <rect key="frame" x="316.66666666666669" y="21" width="46.333333333333314" height="128"/>
-                                                    <state key="normal" title="Button"/>
-                                                    <buttonConfiguration key="configuration" style="plain" image="bookmark.fill" catalog="system"/>
-                                                </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailingMargin" secondItem="h0C-IM-4zR" secondAttribute="trailing" constant="10" id="5lB-Rx-KhK"/>
-                                                <constraint firstItem="DAw-1s-8Gu" firstAttribute="top" secondItem="j4d-UY-bAi" secondAttribute="top" constant="10" id="Bre-Hp-9sA"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="h0C-IM-4zR" secondAttribute="bottom" constant="10" id="HDF-yw-S5B"/>
-                                                <constraint firstAttribute="bottom" secondItem="DAw-1s-8Gu" secondAttribute="bottom" constant="10" id="ZEL-ww-Xz1"/>
-                                                <constraint firstItem="h0C-IM-4zR" firstAttribute="top" secondItem="j4d-UY-bAi" secondAttribute="topMargin" constant="10" id="lvY-TU-woo"/>
-                                                <constraint firstItem="DAw-1s-8Gu" firstAttribute="leading" secondItem="j4d-UY-bAi" secondAttribute="leading" constant="2" id="mv2-cQ-LRI"/>
-                                                <constraint firstItem="h0C-IM-4zR" firstAttribute="leading" secondItem="DAw-1s-8Gu" secondAttribute="trailing" constant="10" id="qor-7Y-XpF"/>
+                                                <constraint firstItem="DAw-1s-8Gu" firstAttribute="leading" secondItem="j4d-UY-bAi" secondAttribute="leading" constant="11" id="4Ij-R1-cMq"/>
+                                                <constraint firstAttribute="bottom" secondItem="DAw-1s-8Gu" secondAttribute="bottom" constant="10" id="7f8-kZ-zGB"/>
+                                                <constraint firstItem="DAw-1s-8Gu" firstAttribute="top" secondItem="j4d-UY-bAi" secondAttribute="top" constant="10" id="XRF-c6-Vhj"/>
+                                                <constraint firstAttribute="trailing" secondItem="DAw-1s-8Gu" secondAttribute="trailing" constant="11" id="j00-uX-siN"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="BookmarksCell" destination="DAw-1s-8Gu" id="NA3-3b-kWa"/>
-                                            <outlet property="removeFromBookmark" destination="h0C-IM-4zR" id="aOv-i9-Cr5"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -443,12 +434,11 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jz5-Qv-GrO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1170" y="732"/>
+            <point key="canvasLocation" x="1168.7022900763359" y="731.69014084507046"/>
         </scene>
     </scenes>
     <resources>
         <image name="bookmark" catalog="system" width="110" height="128"/>
-        <image name="bookmark.fill" catalog="system" width="110" height="128"/>
         <image name="photo.fill" catalog="system" width="128" height="93"/>
         <image name="video.fill" catalog="system" width="128" height="81"/>
         <namedColor name="backgrould-color">
