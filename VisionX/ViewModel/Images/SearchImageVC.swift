@@ -13,6 +13,9 @@ class SearchImageVC: UIViewController {
     @IBOutlet weak var perpageSlider: UISlider!
     @IBOutlet weak var numberLabel: UILabel!
     
+    var currentPage: Int = 1
+    var totalPages: Int = 1
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -41,13 +44,18 @@ class SearchImageVC: UIViewController {
             return
         }
         
-        networkManagerInstance.searchPhotos(query: query, perPage: Int(numberLabel)!) { response in
+        networkManagerInstance.searchPhotos(query: query, perPage: Int(numberLabel)!, page: currentPage) { response in
             guard let response = response else {
                 return
             }
+            
+            self.totalPages = response.total_results
+            
             DispatchQueue.main.async {
                 let showImagesVC = self.storyboard?.instantiateViewController(withIdentifier: "ShowImagesVC") as! ShowImagesVC
                 showImagesVC.photos = response.photos
+                showImagesVC.currentPage = self.currentPage
+                showImagesVC.totalPages = self.totalPages
                 self.navigationController?.pushViewController(showImagesVC, animated: true)
             }
         }

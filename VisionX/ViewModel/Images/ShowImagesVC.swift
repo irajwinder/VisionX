@@ -12,6 +12,8 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     @IBOutlet weak var tableView: UITableView!
     
     var photos: [Photo] = []
+    var currentPage: Int = 1
+    var totalPages: Int = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +22,8 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         tableView.dataSource = self
         tableView.delegate = self
+        print(currentPage)
+        print(totalPages)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

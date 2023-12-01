@@ -19,8 +19,8 @@ class NetworkManager : NSObject {
         super.init()
     }
     
-    func searchPhotos(query: String, perPage: Int, completion: @escaping (PhotoResponse?) -> Void) {
-        let apiUrl = "\(baseImageURL)/search?query=\(query)&per_page=\(perPage)"
+    func searchPhotos(query: String, perPage: Int, page: Int, completion: @escaping (PhotoResponse?) -> Void) {
+        let apiUrl = "\(baseImageURL)/search?query=\(query)&per_page=\(perPage)&page=\(page)"
         
         // 1. Get the url
         guard let requestURL = URL(string: apiUrl) else {
