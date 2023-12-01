@@ -36,21 +36,16 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         // Get the video data for the current row
         let video = videos[indexPath.row]
         
-        // Loop through video pictures and download images asynchronously
-        for videoPicture in video.video_pictures {
-            let pictureLink = videoPicture.picture
-            
-            // Download the image
-            if let imageUrl = URL(string: pictureLink) {
-                networkManagerInstance.downloadImage(from: imageUrl) { videoData in
-                    // Check if imageData is not nil
-                    if let videoData = videoData {
-                        // Convert data to UIImage
-                        if let videoImage = UIImage(data: videoData) {
-                            // Update the cell's image on the main thread
-                            DispatchQueue.main.async {
-                                cell.VideosCell.image = videoImage
-                            }
+        // Load the first video picture asynchronously
+        if let firstVideoPicture = video.video_pictures.first, let imageUrl = URL(string: firstVideoPicture.picture) {
+            networkManagerInstance.downloadImage(from: imageUrl) { videoImageData in
+                // Check if videoImageData is not nil
+                if let videoImageData = videoImageData {
+                    // Convert data to UIImage
+                    if let videoImage = UIImage(data: videoImageData) {
+                        // Update the cell's image on the main thread
+                        DispatchQueue.main.async {
+                            cell.VideosCell.image = videoImage
                         }
                     }
                 }
@@ -89,26 +84,34 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         let indexPath = IndexPath(row: sender.tag, section: 0)
         let selectedVideo = videos[indexPath.row]
         
-        guard let firstVideoFile = selectedVideo.video_files.first else {
-            return
-        }
-
         // Download the video
-        if let videoUrl = URL(string: firstVideoFile.link) {
+        if let firstVideoFile = selectedVideo.video_files.first, let videoUrl = URL(string: firstVideoFile.link) {
             networkManagerInstance.downloadImage(from: videoUrl) { videoData in
                 // Check if videoData is not nil
                 if let videoData = videoData {
-                    // Save the video to the file manager
-                    if let relativePath = fileManagerClassInstance.saveVideoToFileManager(videoData: videoData, video: selectedVideo) {
-                        // Save video link to CoreData
-                        DispatchQueue.main.async {
-                            datamanagerInstance.saveBookmark(bookmarkURL: relativePath)
-                            
-                            // Show alert on the main thread
-                            Validation.showAlert(on: self, with: "Success", message: "Video Bookmarked Successfully.")
+                    // Load the first video picture asynchronously
+                    if let firstVideoPicture = selectedVideo.video_pictures.first,
+                       let imageUrl = URL(string: firstVideoPicture.picture) {
+                        
+                        networkManagerInstance.downloadImage(from: imageUrl) { videoImageData in
+                            // Check if videoImageData is not nil
+                            if let videoImageData = videoImageData {
+                                // Save the video and image to the file manager
+                                let urls = fileManagerClassInstance.saveVideoToFileManager(videoData: videoData, video: selectedVideo, videoImage: videoImageData)
+                                
+                                if let videoURL = urls.videoURL, let imageURL = urls.imageURL {
+                                    // Save video and image links to CoreData
+                                    DispatchQueue.main.async {
+                                        datamanagerInstance.saveBookmark(imageURL: imageURL, videoURL: videoURL)
+                                        
+                                        // Show alert on the main thread
+                                        Validation.showAlert(on: self, with: "Success", message: "Video Bookmarked Successfully.")
+                                    }
+                                } else {
+                                    print("Error saving video or image to FileManager.")
+                                }
+                            }
                         }
-                    } else {
-                        print("Error saving video to FileManager.")
                     }
                 }
             }

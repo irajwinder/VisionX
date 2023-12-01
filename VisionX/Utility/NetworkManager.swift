@@ -97,7 +97,6 @@ class NetworkManager : NSObject {
         // Resume the data task to start the download
         task.resume()
     }
-
 }
 
 let networkManagerInstance = NetworkManager.sharedInstance

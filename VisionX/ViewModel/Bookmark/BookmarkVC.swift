@@ -45,7 +45,7 @@ class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         let bookmark = bookmarks[indexPath.row]
         
         // Load bookmarked image
-        if let imageData = fileManagerClassInstance.loadImageDataFromFileManager(relativePath: bookmark.bookmarkURL ?? "") {
+        if let imageData = fileManagerClassInstance.loadImageDataFromFileManager(relativePath: bookmark.imageURL ?? "") {
             let uiImage = UIImage(data: imageData)
             cell.BookmarksCell.image = uiImage
         } else {
@@ -59,21 +59,19 @@ class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedVideo = bookmarks[indexPath.row]
+        let selectedBookmark = bookmarks[indexPath.row]
         
-        guard let videoURL = fileManagerClassInstance.loadURLFromFileManager(relativePath: selectedVideo.bookmarkURL ?? "") else {
-            print("Video URL file not found.")
-            return
-        }
-        
-        // Create an AVPlayer with the video URL
-        let player = AVPlayer(url: videoURL)
-        let playerViewController = AVPlayerViewController()
-        playerViewController.player = player
-        
-        // Present the AVPlayerViewController and start playing the video
-        present(playerViewController, animated: true) {
-            player.play()
+        // Check if the bookmark represents a video
+        if let videoURL = fileManagerClassInstance.loadURLFromFileManager(relativePath: selectedBookmark.videoURL ?? "") {
+            // Create an AVPlayer with the video URL
+            let player = AVPlayer(url: videoURL)
+            let playerViewController = AVPlayerViewController()
+            playerViewController.player = player
+            
+            // Present the AVPlayerViewController and start playing the video
+            present(playerViewController, animated: true) {
+                player.play()
+            }
         }
     }
     
@@ -82,7 +80,7 @@ class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         let selectedBookmark = bookmarks[indexPath.row]
         
         //Delete the corresponding file from the file manager
-        if let bookmarkURL = selectedBookmark.bookmarkURL {
+        if let bookmarkURL = selectedBookmark.imageURL {
             fileManagerClassInstance.deleteImageFromFileManager(relativePath: bookmarkURL)
         }
         

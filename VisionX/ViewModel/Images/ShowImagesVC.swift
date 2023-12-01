@@ -69,7 +69,7 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                     if let relativePath = fileManagerClassInstance.saveImageToFileManager(imageData: imageData, photo: selectedPhoto) {
                         // Save image link to CoreData
                         DispatchQueue.main.async {
-                            datamanagerInstance.saveBookmark(bookmarkURL: relativePath)
+                            datamanagerInstance.saveBookmark(imageURL: relativePath, videoURL: "")
                             
                             // Show alert on the main thread
                             Validation.showAlert(on: self, with: "Success", message: "Image Bookmarked Successfully.")

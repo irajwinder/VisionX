@@ -46,29 +46,36 @@ class FileManagerClass: NSObject {
         }
     }
     
-    func saveVideoToFileManager(videoData: Data, video: Video) -> String? {
+    func saveVideoToFileManager(videoData: Data, video: Video, videoImage: Data) -> (videoURL: String?, imageURL: String?) {
         let videoID = String(video.id)
         
-        // folder name and file name based on Video ID
+        // folder name and file name based on photo ID
         let folderName = "BookmarkedVideos"
-        let fileName = "\(videoID).mp4"
-        let relativeURL = "\(folderName)/\(fileName)"
+        // Save the video file
+        let videoFileName = "\(videoID).mp4"
+        let videoRelativeURL = "\(folderName)/\(videoFileName)"
+        // Save the video image
+        let imageFileName = "\(videoID).jpg"
+        let imageRelativeURL = "\(folderName)/\(imageFileName)"
         
         do {
             // Get the documents directory URL
             let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-            let fileURL = documentsDirectory.appendingPathComponent(relativeURL)
-            
+            // Save the video data
+            let videoFileURL = documentsDirectory.appendingPathComponent(videoRelativeURL)
             // Create the necessary directory structure if it doesn't exist
-            try FileManager.default.createDirectory(at: fileURL.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
-            
-            // Write the videoData to the file at the specified URL
-            try videoData.write(to: fileURL)
-            return relativeURL
+            try FileManager.default.createDirectory(at: videoFileURL.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
+            // Write the video data to the file at the specified URL
+            try videoData.write(to: videoFileURL)
+            // Save the image data
+            let imageFileURL = documentsDirectory.appendingPathComponent(imageRelativeURL)
+            try FileManager.default.createDirectory(at: imageFileURL.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
+            // Write the videoImage data to the file at the specified URL
+            try videoImage.write(to: imageFileURL)
+            return (videoRelativeURL, imageRelativeURL)
         } catch {
-            // Print an error message if any issues occur during the image-saving process
-            print("Error saving image:", error.localizedDescription)
-            return nil
+            print("Error saving data:", error.localizedDescription)
+            return (nil, nil)
         }
     }
     

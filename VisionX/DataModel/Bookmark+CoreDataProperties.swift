@@ -2,7 +2,7 @@
 //  Bookmark+CoreDataProperties.swift
 //  VisionX
 //
-//  Created by Rajwinder Singh on 11/20/23.
+//  Created by Rajwinder Singh on 11/30/23.
 //
 //
 
@@ -16,7 +16,8 @@ extension Bookmark {
         return NSFetchRequest<Bookmark>(entityName: "Bookmark")
     }
 
-    @NSManaged public var bookmarkURL: String?
+    @NSManaged public var imageURL: String?
+    @NSManaged public var videoURL: String?
 
 }
 

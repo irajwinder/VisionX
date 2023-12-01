@@ -8,7 +8,7 @@
 import UIKit
 
 class SearchVideoVC: UIViewController {
-
+    
     @IBOutlet weak var videoText: UITextField!
     @IBOutlet weak var perPageSlider: UISlider!
     @IBOutlet weak var numberText: UILabel!
@@ -48,6 +48,4 @@ class SearchVideoVC: UIViewController {
             }
         }
     }
-    
-    
 }

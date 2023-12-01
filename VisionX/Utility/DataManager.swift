@@ -18,21 +18,22 @@ class DataManager: NSObject {
     private override init() {
         super.init()
     }
-
+    
     // Save Bookmark to CoreData
-    func saveBookmark(bookmarkURL: String) {
+    func saveBookmark(imageURL: String, videoURL: String?) {
         // Obtains a reference to the AppDelegate
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return
         }
         // Accessing the managed context from the persistent container
         let managedContext = appDelegate.persistentContainer.viewContext
-
+        
         //Create a newBookMark Object
         let newBookmark = Bookmark(context: managedContext)
-
+        
         // Set the values for attribute of the Bookmark entity
-        newBookmark.bookmarkURL = bookmarkURL
+        newBookmark.imageURL = imageURL
+        newBookmark.videoURL = videoURL
         
         do {
             // Attempting to save the changes made to the managed context
@@ -80,7 +81,6 @@ class DataManager: NSObject {
             print("Could not save. \(error), \(error.userInfo)")
         }
     }
-    
 }
 
 let datamanagerInstance = DataManager.sharedInstance
