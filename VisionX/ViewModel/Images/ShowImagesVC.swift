@@ -8,7 +8,9 @@
 import UIKit
 
 class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate  {
-    
+
+    @IBOutlet weak var currentpageLabel: UILabel!
+    @IBOutlet weak var totalPagesLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
     var photos: [Photo] = []
@@ -22,8 +24,9 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         tableView.dataSource = self
         tableView.delegate = self
-        print(currentPage)
-        print(totalPages)
+        
+        self.currentpageLabel.text = String("Page Number: \(currentPage)")
+        self.totalPagesLabel.text = String("Total Number: \(totalPages)")
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
