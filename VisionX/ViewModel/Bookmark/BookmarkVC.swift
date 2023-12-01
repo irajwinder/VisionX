@@ -58,8 +58,14 @@ class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedBookmark = bookmarks[indexPath.row]
         
-        // Check if the bookmark represents a video
-        if let videoURL = fileManagerClassInstance.loadURLFromFileManager(relativePath: selectedBookmark.videoURL ?? "") {
+        // Check if the bookmark has a video URL
+        guard let videoURL = fileManagerClassInstance.loadURLFromFileManager(relativePath: selectedBookmark.videoURL ?? "") else {
+            // Handle the case when there is no video URL
+            return
+        }
+        
+        // Check if the video is playable
+        if AVURLAsset(url: videoURL).isPlayable {
             // Create an AVPlayer with the video URL
             let player = AVPlayer(url: videoURL)
             let playerViewController = AVPlayerViewController()
@@ -71,6 +77,7 @@ class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
             }
         }
     }
+    
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
