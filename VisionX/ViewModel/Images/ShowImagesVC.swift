@@ -8,14 +8,16 @@
 import UIKit
 
 class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate  {
-
+    
     @IBOutlet weak var currentpageLabel: UILabel!
     @IBOutlet weak var totalPagesLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
     var photos: [Photo] = []
+    var response: PhotoResponse?
+    var query: String = ""
+    var perPage: Int = 0
     var currentPage: Int = 1
-    var totalPages: Int = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,8 +27,12 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         tableView.dataSource = self
         tableView.delegate = self
         
-        self.currentpageLabel.text = String("Page Number: \(currentPage)")
-        self.totalPagesLabel.text = String("Total Number: \(totalPages)")
+        guard let response = response else {
+            return
+        }
+        self.perPage = response.per_page
+        self.currentpageLabel.text = String("Current Page: \(response.page)")
+        self.totalPagesLabel.text = String("Total Pages: \(response.total_results)")
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -84,6 +90,37 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                     } else {
                         print("Error saving image to FileManager.")
                     }
+                }
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let lastRowIndex = photos.count - 1
+        // Check if the last cell is about to be displayed
+        if indexPath.row == lastRowIndex {
+            // Load the next page of photos
+            loadNextPage()
+        }
+    }
+    
+    func loadNextPage() {
+        // Increment the current page
+        currentPage += 1
+        
+        // Make a network request to search for photos for the next page
+        networkManagerInstance.searchPhotos(query: query, perPage: perPage, page: currentPage) { [weak self] response in
+            // Capture a weak reference to self to avoid strong reference cycles
+            guard let self = self else { return }
+            
+            // Check if there are new photos
+            if let newPhotos = response?.photos {
+                // Append the new photos to the existing photos array
+                self.photos.append(contentsOf: newPhotos)
+                // Update the total pages label
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                    self.currentpageLabel.text = String("Current Page: \(self.currentPage)")
                 }
             }
         }

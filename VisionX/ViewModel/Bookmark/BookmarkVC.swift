@@ -78,7 +78,6 @@ class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         }
     }
     
-    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Handle the deletion when the user swipes to delete

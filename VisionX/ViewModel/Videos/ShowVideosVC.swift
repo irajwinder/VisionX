@@ -89,7 +89,7 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
             networkManagerInstance.downloadImage(from: videoUrl) { videoData in
                 // Check if videoData is not nil
                 if let videoData = videoData {
-                    // Load the first video picture asynchronously
+                    // Load the first video picture
                     if let firstVideoPicture = selectedVideo.video_pictures.first,
                        let imageUrl = URL(string: firstVideoPicture.picture) {
                         
