@@ -10,9 +10,16 @@ import AVKit
 
 class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    @IBOutlet weak var currentpageLabel: UILabel!
+    @IBOutlet weak var totalPagesLabel: UILabel!
     @IBOutlet weak var videoTableView: UITableView!
     
     var videos: [Video] = []
+    var response: VideoResponse?
+    var query: String = ""
+    var currentPage: Int = 1
+    var perPage: Int = 0
+    var totalPages: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +28,14 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         videoTableView.dataSource = self
         videoTableView.delegate = self
+        
+        guard let response = response else {
+            return
+        }
+        self.perPage = response.per_page
+        self.totalPages = response.total_results
+        self.currentpageLabel.text = String("Current Page: \(response.page)")
+        self.totalPagesLabel.text = String("Total Pages: \(totalPages)")
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -52,8 +67,8 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
             }
         }
         
-        cell.videoBookmark.tag = indexPath.row
-        cell.videoBookmark.addTarget(self, action: #selector(addBookmark), for: .touchUpInside)
+        cell.VideosBookmark.tag = indexPath.row
+        cell.VideosBookmark.addTarget(self, action: #selector(addBookmark), for: .touchUpInside)
         
         return cell
     }
@@ -114,6 +129,40 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                         }
                     }
                 }
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let lastRowIndex = videos.count - 1
+        // Check if the last cell is about to be displayed
+        if indexPath.row == lastRowIndex {
+            // Check if there are more pages to load
+            if currentPage < totalPages {
+                // Load the next page of photos
+                loadNextPage()
+            }
+        }
+    }
+    
+    func loadNextPage() {
+        // Increment the current page
+        currentPage += 1
+        
+        // Call the API to fetch the next page of videos
+        networkManagerInstance.searchVideos(query: query, perPage: perPage, page: currentPage) { [weak self] response in
+            // Capture a weak reference to self to avoid strong reference cycles and check if there are new videos
+            guard let self = self, let newVideos = response?.videos else {
+                return
+            }
+            
+            // Append the new video to the existing videos array
+            self.videos.append(contentsOf: newVideos)
+            
+            // Update UI on the main thread
+            DispatchQueue.main.async {
+                self.videoTableView.reloadData()
+                self.currentpageLabel.text = "Current Page: \(self.currentPage)"
             }
         }
     }

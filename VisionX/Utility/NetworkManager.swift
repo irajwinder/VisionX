@@ -51,8 +51,8 @@ class NetworkManager : NSObject {
         task.resume()
     }
     
-    func searchVideos(query: String, perPage: Int, completion: @escaping (VideoResponse?) -> Void) {
-        let apiUrl = "\(baseVideoURL)/search?query=\(query)&per_page=\(perPage)"
+    func searchVideos(query: String, perPage: Int, page: Int, completion: @escaping (VideoResponse?) -> Void) {
+        let apiUrl = "\(baseVideoURL)/search?query=\(query)&per_page=\(perPage)&page=\(page)"
         
         // 1. Get the url
         guard let requestURL = URL(string: apiUrl) else {

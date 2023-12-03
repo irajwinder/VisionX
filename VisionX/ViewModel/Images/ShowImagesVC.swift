@@ -16,8 +16,9 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     var photos: [Photo] = []
     var response: PhotoResponse?
     var query: String = ""
-    var perPage: Int = 0
     var currentPage: Int = 1
+    var perPage: Int = 0
+    var totalPages: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,8 +32,9 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
             return
         }
         self.perPage = response.per_page
+        self.totalPages = response.total_results
         self.currentpageLabel.text = String("Current Page: \(response.page)")
-        self.totalPagesLabel.text = String("Total Pages: \(response.total_results)")
+        self.totalPagesLabel.text = String("Total Pages: \(totalPages)")
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -99,8 +101,11 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         let lastRowIndex = photos.count - 1
         // Check if the last cell is about to be displayed
         if indexPath.row == lastRowIndex {
-            // Load the next page of photos
-            loadNextPage()
+            // Check if there are more pages to load
+            if currentPage < totalPages {
+                // Load the next page of photos
+                loadNextPage()
+            }
         }
     }
     
@@ -117,7 +122,7 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
             if let newPhotos = response?.photos {
                 // Append the new photos to the existing photos array
                 self.photos.append(contentsOf: newPhotos)
-                // Update the total pages label
+                // Update UI on the main thread
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                     self.currentpageLabel.text = String("Current Page: \(self.currentPage)")

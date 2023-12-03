@@ -9,5 +9,5 @@ import UIKit
 
 class VideosTableViewCell: UITableViewCell {
     @IBOutlet weak var VideosCell: UIImageView!
-    @IBOutlet weak var videoBookmark: UIButton!
+    @IBOutlet weak var VideosBookmark: UIButton!
 }

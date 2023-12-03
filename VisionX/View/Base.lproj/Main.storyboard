@@ -176,7 +176,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="taP-l8-LPh" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2687.7862595419847" y="-806.33802816901414"/>
+            <point key="canvasLocation" x="2665" y="-806"/>
         </scene>
         <!--Videos-->
         <scene sceneID="AoZ-Tl-MhV">
@@ -332,76 +332,12 @@
                         <outlet property="numberText" destination="L6R-3r-vbs" id="2s9-5X-SoW"/>
                         <outlet property="perPageSlider" destination="2iM-3z-3ZR" id="KNv-Mf-CXA"/>
                         <outlet property="videoText" destination="fmu-M1-cCI" id="fnu-Ro-zeq"/>
-                        <segue destination="Aa3-Tl-APY" kind="show" id="xWg-b4-Jvw"/>
+                        <segue destination="iVC-0T-BdJ" kind="show" id="3sV-Qq-n6k"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SnI-EE-vTC" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1822" y="4"/>
-        </scene>
-        <!--Show VideosVC-->
-        <scene sceneID="5rL-wT-wxM">
-            <objects>
-                <viewController storyboardIdentifier="ShowVideosVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Aa3-Tl-APY" customClass="ShowVideosVC" customModule="VisionX" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="6fa-qC-Jco">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="dJC-2d-w7f">
-                                <rect key="frame" x="0.0" y="103" width="393" height="749"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="VideoCell" rowHeight="170" id="udl-yA-jzA" customClass="VideosTableViewCell" customModule="VisionX" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="50" width="393" height="170"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="udl-yA-jzA" id="ppF-t4-z9d">
-                                            <rect key="frame" x="0.0" y="0.0" width="393" height="170"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ma5-KF-UuU">
-                                                    <rect key="frame" x="2" y="10" width="304.66666666666669" height="150"/>
-                                                </imageView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hLc-Gj-CN0">
-                                                    <rect key="frame" x="316.66666666666669" y="21" width="46.333333333333314" height="128"/>
-                                                    <state key="normal" title="Button"/>
-                                                    <buttonConfiguration key="configuration" style="plain" image="bookmark" catalog="system"/>
-                                                </button>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="ma5-KF-UuU" firstAttribute="leading" secondItem="ppF-t4-z9d" secondAttribute="leading" constant="2" id="IS6-31-NrS"/>
-                                                <constraint firstItem="hLc-Gj-CN0" firstAttribute="top" secondItem="ppF-t4-z9d" secondAttribute="topMargin" constant="10" id="Q1v-jY-3zR"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="hLc-Gj-CN0" secondAttribute="trailing" constant="10" id="SwV-DL-Q6e"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="hLc-Gj-CN0" secondAttribute="bottom" constant="10" id="baj-3X-zli"/>
-                                                <constraint firstItem="ma5-KF-UuU" firstAttribute="top" secondItem="ppF-t4-z9d" secondAttribute="top" constant="10" id="oZO-98-fOW"/>
-                                                <constraint firstAttribute="bottom" secondItem="ma5-KF-UuU" secondAttribute="bottom" constant="10" id="tIV-uN-o32"/>
-                                                <constraint firstItem="hLc-Gj-CN0" firstAttribute="leading" secondItem="ma5-KF-UuU" secondAttribute="trailing" constant="10" id="tfB-0F-fN8"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="VideosCell" destination="ma5-KF-UuU" id="wnG-QG-hrz"/>
-                                            <outlet property="videoBookmark" destination="hLc-Gj-CN0" id="IXJ-Hc-p2P"/>
-                                        </connections>
-                                    </tableViewCell>
-                                </prototypes>
-                            </tableView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="NSi-R7-RbT"/>
-                        <color key="backgroundColor" name="backgrould-color"/>
-                        <constraints>
-                            <constraint firstAttribute="bottom" secondItem="dJC-2d-w7f" secondAttribute="bottom" id="O6Y-VK-jHC"/>
-                            <constraint firstItem="NSi-R7-RbT" firstAttribute="trailing" secondItem="dJC-2d-w7f" secondAttribute="trailing" id="aY1-zL-rVy"/>
-                            <constraint firstItem="dJC-2d-w7f" firstAttribute="leading" secondItem="NSi-R7-RbT" secondAttribute="leading" id="bo5-gG-6H1"/>
-                            <constraint firstItem="dJC-2d-w7f" firstAttribute="top" secondItem="NSi-R7-RbT" secondAttribute="top" id="epP-vV-bAI"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="0Dl-1V-wGd"/>
-                    <connections>
-                        <outlet property="videoTableView" destination="dJC-2d-w7f" id="LWQ-sT-8yR"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="SVe-ir-Nzj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2808" y="4"/>
         </scene>
         <!--BookmarkVC-->
         <scene sceneID="vyY-IK-mJH">
@@ -457,6 +393,92 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jz5-Qv-GrO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1168.7022900763359" y="731.69014084507046"/>
+        </scene>
+        <!--Show VideosVC-->
+        <scene sceneID="xuI-gv-x8z">
+            <objects>
+                <viewController storyboardIdentifier="ShowVideosVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="iVC-0T-BdJ" customClass="ShowVideosVC" customModule="VisionX" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="aRI-7F-CBA">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="u17-OX-35N">
+                                <rect key="frame" x="10" y="103" width="373" height="20.333333333333329"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="currentpage" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ct4-J5-kZh">
+                                        <rect key="frame" x="0.0" y="0.0" width="186.66666666666666" height="20.333333333333332"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="totalPages" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HgR-OG-gSF">
+                                        <rect key="frame" x="186.66666666666663" y="0.0" width="186.33333333333337" height="20.333333333333332"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="bHF-9B-wGa">
+                                <rect key="frame" x="0.0" y="133" width="393" height="719"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="VideoCell" rowHeight="170" id="DFp-tZ-s1H" customClass="VideosTableViewCell" customModule="VisionX" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="170"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="DFp-tZ-s1H" id="flG-Dr-Pxw">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="170"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="TAi-1a-Ta5">
+                                                    <rect key="frame" x="2" y="10" width="304.66666666666669" height="150"/>
+                                                </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vfm-7n-tY9">
+                                                    <rect key="frame" x="316.66666666666669" y="21" width="46.333333333333314" height="128"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" image="bookmark" catalog="system"/>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="TAi-1a-Ta5" firstAttribute="leading" secondItem="flG-Dr-Pxw" secondAttribute="leading" constant="2" id="AM8-AT-sAY"/>
+                                                <constraint firstAttribute="bottom" secondItem="TAi-1a-Ta5" secondAttribute="bottom" constant="10" id="Hbn-lw-hY9"/>
+                                                <constraint firstItem="Vfm-7n-tY9" firstAttribute="top" secondItem="flG-Dr-Pxw" secondAttribute="topMargin" constant="10" id="K5g-wS-ptI"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="Vfm-7n-tY9" secondAttribute="trailing" constant="10" id="Vd8-wN-MdP"/>
+                                                <constraint firstItem="TAi-1a-Ta5" firstAttribute="top" secondItem="flG-Dr-Pxw" secondAttribute="top" constant="10" id="qP1-Ue-bSh"/>
+                                                <constraint firstItem="Vfm-7n-tY9" firstAttribute="leading" secondItem="TAi-1a-Ta5" secondAttribute="trailing" constant="10" id="ucY-xV-NRy"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Vfm-7n-tY9" secondAttribute="bottom" constant="10" id="xU3-St-vu1"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="VideosBookmark" destination="Vfm-7n-tY9" id="5lR-rF-wpv"/>
+                                            <outlet property="VideosCell" destination="TAi-1a-Ta5" id="Hmh-ra-DmS"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="CyQ-bZ-13C"/>
+                        <color key="backgroundColor" name="backgrould-color"/>
+                        <constraints>
+                            <constraint firstItem="CyQ-bZ-13C" firstAttribute="trailing" secondItem="u17-OX-35N" secondAttribute="trailing" constant="10" id="KxA-sN-GGW"/>
+                            <constraint firstItem="u17-OX-35N" firstAttribute="leading" secondItem="CyQ-bZ-13C" secondAttribute="leading" constant="10" id="cL1-fV-w8V"/>
+                            <constraint firstItem="bHF-9B-wGa" firstAttribute="leading" secondItem="CyQ-bZ-13C" secondAttribute="leading" id="d0d-IM-bJh"/>
+                            <constraint firstAttribute="bottom" secondItem="bHF-9B-wGa" secondAttribute="bottom" id="ei3-nx-6cO"/>
+                            <constraint firstItem="CyQ-bZ-13C" firstAttribute="trailing" secondItem="bHF-9B-wGa" secondAttribute="trailing" id="jz2-HL-J3x"/>
+                            <constraint firstItem="u17-OX-35N" firstAttribute="top" secondItem="CyQ-bZ-13C" secondAttribute="top" id="lyN-yE-FNj"/>
+                            <constraint firstItem="bHF-9B-wGa" firstAttribute="top" secondItem="CyQ-bZ-13C" secondAttribute="top" constant="30" id="zEs-vF-thB"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="mAx-BX-cdW"/>
+                    <connections>
+                        <outlet property="currentpageLabel" destination="Ct4-J5-kZh" id="9xm-wM-Qdr"/>
+                        <outlet property="totalPagesLabel" destination="HgR-OG-gSF" id="4cK-5M-YDN"/>
+                        <outlet property="videoTableView" destination="bHF-9B-wGa" id="irn-HQ-Ptn"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0Oe-5Y-LZt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2665" y="4"/>
         </scene>
     </scenes>
     <resources>
