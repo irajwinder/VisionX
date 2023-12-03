@@ -70,7 +70,6 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                 }
             }
         }
-        
         cell.imageBookmark.tag = indexPath.row
         cell.imageBookmark.addTarget(self, action: #selector(addBookmark), for: .touchUpInside)
         

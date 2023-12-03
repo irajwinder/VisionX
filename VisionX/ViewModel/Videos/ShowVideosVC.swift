@@ -46,6 +46,33 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         return 170
     }
     
+//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "VideoCell", for: indexPath) as! VideosTableViewCell
+//        // Get the video data for the current row
+//        let video = videos[indexPath.row]
+//        
+//        // Load the first video picture asynchronously
+//        if let firstVideoPicture = video.video_pictures.first, let imageUrl = URL(string: firstVideoPicture.picture) {
+//            networkManagerInstance.downloadImage(from: imageUrl) { videoImageData in
+//                // Check if videoImageData is not nil
+//                if let videoImageData = videoImageData {
+//                    // Convert data to UIImage
+//                    if let videoImage = UIImage(data: videoImageData) {
+//                        // Update the cell's image on the main thread
+//                        DispatchQueue.main.async {
+//                            cell.VideosCell.image = videoImage
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        
+//        cell.VideosBookmark.tag = indexPath.row
+//        cell.VideosBookmark.addTarget(self, action: #selector(addBookmark), for: .touchUpInside)
+//        
+//        return cell
+//    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "VideoCell", for: indexPath) as! VideosTableViewCell
         // Get the video data for the current row
@@ -53,11 +80,18 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         // Load the first video picture asynchronously
         if let firstVideoPicture = video.video_pictures.first, let imageUrl = URL(string: firstVideoPicture.picture) {
-            networkManagerInstance.downloadImage(from: imageUrl) { videoImageData in
-                // Check if videoImageData is not nil
-                if let videoImageData = videoImageData {
-                    // Convert data to UIImage
-                    if let videoImage = UIImage(data: videoImageData) {
+            // Check if the image is already in the cache
+            if let cachedImage = networkManagerInstance.getImage(forKey: imageUrl.absoluteString) {
+                print("Image loaded from cache")
+                cell.VideosCell.image = cachedImage
+            } else {
+                print("Downloading image from network")
+                // If not, download the image and store it in the cache
+                networkManagerInstance.downloadImage(from: imageUrl) { videoImageData in
+                    // Check if videoImageData is not nil and Convert data to UIImage
+                    if let videoImageData = videoImageData, let videoImage = UIImage(data: videoImageData) {
+                        // Store the downloaded image in the cache
+                        networkManagerInstance.setImage(videoImage, forKey: imageUrl.absoluteString)
                         // Update the cell's image on the main thread
                         DispatchQueue.main.async {
                             cell.VideosCell.image = videoImage
@@ -66,7 +100,6 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                 }
             }
         }
-        
         cell.VideosBookmark.tag = indexPath.row
         cell.VideosBookmark.addTarget(self, action: #selector(addBookmark), for: .touchUpInside)
         
