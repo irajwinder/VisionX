@@ -49,13 +49,19 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         let cell = tableView.dequeueReusableCell(withIdentifier: "ImageCell", for: indexPath) as! ImagesTableViewCell
         let photo = photos[indexPath.row]
         
-        // Download the image
-        if let imageUrl = URL(string: photo.src.tiny) {
-            networkManagerInstance.downloadImage(from: imageUrl) { imageData in
-                // Check if imageData is not nil
-                if let imageData = imageData {
-                    // Convert data to UIImage
-                    if let image = UIImage(data: imageData) {
+        // Check if the image is already in the cache
+        if let cachedImage = networkManagerInstance.getImage(forKey: photo.src.tiny) {
+            print("Image loaded from cache")
+            cell.ImagesCell.image = cachedImage
+        } else {
+            print("Downloading image from network")
+            // If not, download the image and store it in the cache
+            if let imageUrl = URL(string: photo.src.tiny) {
+                networkManagerInstance.downloadImage(from: imageUrl) { imageData in
+                    // Check if imageData is not nil and Convert data to UIImage
+                    if let imageData = imageData, let image = UIImage(data: imageData) {
+                        // Store the downloaded image in the cache
+                        networkManagerInstance.setImage(image, forKey: photo.src.tiny)
                         // Update the cell's image on the main thread
                         DispatchQueue.main.async {
                             cell.ImagesCell.image = image

@@ -17,6 +17,22 @@ class NetworkManager : NSObject {
     
     private override init() {
         super.init()
+        cache.countLimit = maxItemCount //50 images
+    }
+    
+    // NSCache to store UIImage objects with NSString keys
+    private var cache = NSCache<NSString, UIImage>()
+    private let maxItemCount = 50
+   
+    
+    // Retrieve an image from the cache using a key
+    func getImage(forKey key: String) -> UIImage? {
+        return cache.object(forKey: key as NSString)
+    }
+
+    // Store an image in the cache using a key
+    func setImage(_ image: UIImage, forKey key: String) {
+        cache.setObject(image, forKey: key as NSString)
     }
     
     func searchPhotos(query: String, perPage: Int, page: Int, completion: @escaping (PhotoResponse?) -> Void) {
