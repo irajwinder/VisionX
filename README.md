@@ -1,6 +1,6 @@
 # VisionX
 
-VisionX is an iOS application designed to search and explore images and videos using the Pexels API. The app supports both iPhone and iPad devices and is built using UIKit with a Model-View-ViewModel (MVVM) architecture. 
+VisionX iOS application designed to search and explore images and videos using the Pexels API. The app supports both iPhone and iPad devices and is built using UIKit with a Model-View-ViewModel (MVVM) architecture. 
 
 ## Table of Contents
 - [Features](#features)
@@ -33,7 +33,7 @@ This project utilizes the following technologies:
 - Programming Language: Swift
 - Database: CoreData
 - Frameworks: UIKit
-- API - Pexel API
+- API: Pexel API
 
 ## Installation
 1. Clone the repository: `git clone https://github.com/irajwinder/VisionX.git`
