@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
 
 //Singleton Class
 class FileManagerClass: NSObject {

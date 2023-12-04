@@ -92,17 +92,13 @@
 		A21431DE2B0C52CF00DE8DE3 /* VisionX */ = {
 			isa = PBXGroup;
 			children = (
-				A21432022B0C557500DE8DE3 /* DataModel */,
-				A21432072B0CE47200DE8DE3 /* Utility */,
-				A21432032B0C55F700DE8DE3 /* ViewModel */,
-				A214320D2B0CE6BA00DE8DE3 /* View */,
 				A214320E2B0CE73100DE8DE3 /* Model */,
-				A21431DF2B0C52CF00DE8DE3 /* AppDelegate.swift */,
-				A21431E12B0C52CF00DE8DE3 /* SceneDelegate.swift */,
-				A21431EB2B0C52D000DE8DE3 /* Assets.xcassets */,
-				A21431ED2B0C52D000DE8DE3 /* LaunchScreen.storyboard */,
-				A21431F02B0C52D000DE8DE3 /* Info.plist */,
-				A21431E82B0C52CF00DE8DE3 /* VisionX.xcdatamodeld */,
+				A214320D2B0CE6BA00DE8DE3 /* View */,
+				A26C8D7B2B1D759A00B1DF7B /* ViewModel */,
+				A21432072B0CE47200DE8DE3 /* Utility */,
+				A26C8D782B1D701500B1DF7B /* Service */,
+				A26C8D7C2B1D775000B1DF7B /* App Delegate */,
+				A26C8D7D2B1D777100B1DF7B /* Resources */,
 			);
 			path = VisionX;
 			sourceTree = "<group>";
@@ -116,14 +112,14 @@
 			path = DataModel;
 			sourceTree = "<group>";
 		};
-		A21432032B0C55F700DE8DE3 /* ViewModel */ = {
+		A21432032B0C55F700DE8DE3 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
 				A2C7A8882B1630F900CA5A28 /* Images */,
 				A2C7A8892B16310F00CA5A28 /* Videos */,
 				A2DC63802B16A0BC0080A94F /* Bookmark */,
 			);
-			path = ViewModel;
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		A21432072B0CE47200DE8DE3 /* Utility */ = {
@@ -131,8 +127,6 @@
 			children = (
 				A21432092B0CE4A600DE8DE3 /* FileManagerClass.swift */,
 				A214320B2B0CE52F00DE8DE3 /* DataManager.swift */,
-				A20CAA602B0E6FDB00BB2622 /* NetworkManager.swift */,
-				A20CAA622B0E6FF200BB2622 /* APIManager.swift */,
 				A2C7A8822B153D7800CA5A28 /* Constants.swift */,
 				A2C7A8842B1558B900CA5A28 /* Validation.swift */,
 			);
@@ -142,7 +136,8 @@
 		A214320D2B0CE6BA00DE8DE3 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				A21431E52B0C52CF00DE8DE3 /* Main.storyboard */,
+				A26C8D7A2B1D74EE00B1DF7B /* View */,
+				A21432032B0C55F700DE8DE3 /* Controller */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -150,10 +145,58 @@
 		A214320E2B0CE73100DE8DE3 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				A21432022B0C557500DE8DE3 /* DataModel */,
 				A214320F2B0CE76400DE8DE3 /* Photo.swift */,
 				A2F9EFA62B0E49C600055DE1 /* Video.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		A26C8D782B1D701500B1DF7B /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				A20CAA602B0E6FDB00BB2622 /* NetworkManager.swift */,
+				A20CAA622B0E6FF200BB2622 /* APIManager.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		A26C8D7A2B1D74EE00B1DF7B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				A21431E52B0C52CF00DE8DE3 /* Main.storyboard */,
+				A21431ED2B0C52D000DE8DE3 /* LaunchScreen.storyboard */,
+				A2C7A88C2B16377100CA5A28 /* ImagesTableViewCell.swift */,
+				A2C7A88A2B16316600CA5A28 /* VideosTableViewCell.swift */,
+				A2F1DCC02B18C166007F9137 /* BookmarkTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		A26C8D7B2B1D759A00B1DF7B /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		A26C8D7C2B1D775000B1DF7B /* App Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				A21431DF2B0C52CF00DE8DE3 /* AppDelegate.swift */,
+				A21431E12B0C52CF00DE8DE3 /* SceneDelegate.swift */,
+			);
+			path = "App Delegate";
+			sourceTree = "<group>";
+		};
+		A26C8D7D2B1D777100B1DF7B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A21431EB2B0C52D000DE8DE3 /* Assets.xcassets */,
+				A21431F02B0C52D000DE8DE3 /* Info.plist */,
+				A21431E82B0C52CF00DE8DE3 /* VisionX.xcdatamodeld */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		A2C7A8882B1630F900CA5A28 /* Images */ = {
@@ -161,7 +204,6 @@
 			children = (
 				A2F1A2B42B14EB5500E91A6E /* SearchImageVC.swift */,
 				A21431E32B0C52CF00DE8DE3 /* ShowImagesVC.swift */,
-				A2C7A88C2B16377100CA5A28 /* ImagesTableViewCell.swift */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -171,7 +213,6 @@
 			children = (
 				A21432052B0C565200DE8DE3 /* SearchVideoVC.swift */,
 				A2C7A8862B1630D300CA5A28 /* ShowVideosVC.swift */,
-				A2C7A88A2B16316600CA5A28 /* VideosTableViewCell.swift */,
 			);
 			path = Videos;
 			sourceTree = "<group>";
@@ -180,7 +221,6 @@
 			isa = PBXGroup;
 			children = (
 				A2DC63812B16A0DE0080A94F /* BookmarkVC.swift */,
-				A2F1DCC02B18C166007F9137 /* BookmarkTableViewCell.swift */,
 			);
 			path = Bookmark;
 			sourceTree = "<group>";
