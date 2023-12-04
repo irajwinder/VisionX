@@ -8,17 +8,11 @@
 import UIKit
 
 class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate  {
+    var viewModel = SearchImageViewModel()
     
     @IBOutlet weak var currentpageLabel: UILabel!
     @IBOutlet weak var totalPagesLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
-    
-    var photos: [Photo] = []
-    var response: PhotoResponse?
-    var query: String = ""
-    var currentPage: Int = 1
-    var perPage: Int = 0
-    var totalPages: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,17 +22,17 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         tableView.dataSource = self
         tableView.delegate = self
         
-        guard let response = response else {
+        guard let response = viewModel.response else {
             return
         }
-        self.perPage = response.per_page
-        self.totalPages = response.total_results
+        viewModel.perPage = response.per_page
+        viewModel.totalPages = response.total_results
         self.currentpageLabel.text = String("Current Page: \(response.page)")
-        self.totalPagesLabel.text = String("Total Pages: \(totalPages)")
+        self.totalPagesLabel.text = String("Total Pages: \(viewModel.totalPages)")
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return photos.count
+        return viewModel.photos.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -47,7 +41,7 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ImageCell", for: indexPath) as! ImagesTableViewCell
-        let photo = photos[indexPath.row]
+        let photo = viewModel.photos[indexPath.row]
         
         // Check if the image is already in the cache
         if let cachedImage = networkManagerInstance.getImage(forKey: photo.src.tiny) {
@@ -78,7 +72,7 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     @objc func addBookmark(sender: UIButton) {
         let indexPath = IndexPath(row: sender.tag, section: 0)
-        let selectedPhoto = photos[indexPath.row]
+        let selectedPhoto = viewModel.photos[indexPath.row]
         
         // Download the image
         if let imageUrl = URL(string: selectedPhoto.src.tiny) {
@@ -103,11 +97,11 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let lastRowIndex = photos.count - 1
+        let lastRowIndex = viewModel.photos.count - 1
         // Check if the last cell is about to be displayed
         if indexPath.row == lastRowIndex {
             // Check if there are more pages to load
-            if currentPage < totalPages {
+            if viewModel.currentPage < viewModel.totalPages {
                 // Load the next page of photos
                 loadNextPage()
             }
@@ -116,21 +110,21 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     func loadNextPage() {
         // Increment the current page
-        currentPage += 1
+        viewModel.currentPage += 1
         
         // Make a network request to search for photos for the next page
-        networkManagerInstance.searchPhotos(query: query, perPage: perPage, page: currentPage) { [weak self] response in
+        networkManagerInstance.searchPhotos(query: viewModel.query, perPage: viewModel.perPage, page: viewModel.currentPage) { [weak self] response in
             // Capture a weak reference to self to avoid strong reference cycles
             guard let self = self else { return }
             
             // Check if there are new photos
             if let newPhotos = response?.photos {
                 // Append the new photos to the existing photos array
-                self.photos.append(contentsOf: newPhotos)
+                self.viewModel.photos.append(contentsOf: newPhotos)
                 // Update UI on the main thread
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
-                    self.currentpageLabel.text = String("Current Page: \(self.currentPage)")
+                    self.currentpageLabel.text = String("Current Page: \(self.viewModel.currentPage)")
                 }
             }
         }

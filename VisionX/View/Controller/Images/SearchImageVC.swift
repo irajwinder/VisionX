@@ -8,6 +8,7 @@
 import UIKit
                                
 class SearchImageVC: UIViewController {
+    var viewModel = SearchImageViewModel()
     
     @IBOutlet weak var imageText: UITextField!
     @IBOutlet weak var perpageSlider: UISlider!
@@ -48,9 +49,9 @@ class SearchImageVC: UIViewController {
             
             DispatchQueue.main.async {
                 let showImagesVC = self.storyboard?.instantiateViewController(withIdentifier: "ShowImagesVC") as! ShowImagesVC
-                showImagesVC.photos = response.photos
-                showImagesVC.query = query
-                showImagesVC.response = response
+                showImagesVC.viewModel.photos = response.photos
+                showImagesVC.viewModel.query = query
+                showImagesVC.viewModel.response = response
                 self.navigationController?.pushViewController(showImagesVC, animated: true)
             }
         }
