@@ -15,3 +15,6 @@ class SearchImageViewModel {
     var perPage: Int = 0
     var totalPages: Int = 0
 }
+
+
+    //non ui - business logic, not dependant on UI

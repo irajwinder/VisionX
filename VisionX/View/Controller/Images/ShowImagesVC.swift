@@ -71,6 +71,8 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     }
     
     @objc func addBookmark(sender: UIButton) {
+        
+        //move it in a function
         let indexPath = IndexPath(row: sender.tag, section: 0)
         let selectedPhoto = viewModel.photos[indexPath.row]
         
@@ -94,6 +96,14 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                 }
             }
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedPhoto = viewModel.photos[indexPath.row]
+        
+        let showImageDetailVC = self.storyboard?.instantiateViewController(withIdentifier: "ShowImageDetailVC") as! ShowImageDetailVC
+        showImageDetailVC.selectedPhoto = selectedPhoto
+        self.navigationController?.pushViewController(showImageDetailVC, animated: true)
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -122,6 +132,8 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                 // Append the new photos to the existing photos array
                 self.viewModel.photos.append(contentsOf: newPhotos)
                 // Update UI on the main thread
+                
+                //here
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                     self.currentpageLabel.text = String("Current Page: \(self.viewModel.currentPage)")
