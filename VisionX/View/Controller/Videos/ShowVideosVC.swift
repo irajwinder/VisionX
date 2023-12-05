@@ -9,17 +9,11 @@ import UIKit
 import AVKit
 
 class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    var viewModel = VideoViewModel()
     
     @IBOutlet weak var currentpageLabel: UILabel!
     @IBOutlet weak var totalPagesLabel: UILabel!
     @IBOutlet weak var videoTableView: UITableView!
-    
-    var videos: [Video] = []
-    var response: VideoResponse?
-    var query: String = ""
-    var currentPage: Int = 1
-    var perPage: Int = 0
-    var totalPages: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,54 +23,27 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         videoTableView.dataSource = self
         videoTableView.delegate = self
         
-        guard let response = response else {
+        guard let response = viewModel.response else {
             return
         }
-        self.perPage = response.per_page
-        self.totalPages = response.total_results
+        self.viewModel.perPage = response.per_page
+        self.viewModel.totalPages = response.total_results
         self.currentpageLabel.text = String("Current Page: \(response.page)")
-        self.totalPagesLabel.text = String("Total Pages: \(totalPages)")
+        self.totalPagesLabel.text = String("Total Pages: \(viewModel.totalPages)")
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return videos.count
+        return viewModel.videos.count
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 170
     }
     
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "VideoCell", for: indexPath) as! VideosTableViewCell
-//        // Get the video data for the current row
-//        let video = videos[indexPath.row]
-//        
-//        // Load the first video picture asynchronously
-//        if let firstVideoPicture = video.video_pictures.first, let imageUrl = URL(string: firstVideoPicture.picture) {
-//            networkManagerInstance.downloadImage(from: imageUrl) { videoImageData in
-//                // Check if videoImageData is not nil
-//                if let videoImageData = videoImageData {
-//                    // Convert data to UIImage
-//                    if let videoImage = UIImage(data: videoImageData) {
-//                        // Update the cell's image on the main thread
-//                        DispatchQueue.main.async {
-//                            cell.VideosCell.image = videoImage
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        
-//        cell.VideosBookmark.tag = indexPath.row
-//        cell.VideosBookmark.addTarget(self, action: #selector(addBookmark), for: .touchUpInside)
-//        
-//        return cell
-//    }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "VideoCell", for: indexPath) as! VideosTableViewCell
         // Get the video data for the current row
-        let video = videos[indexPath.row]
+        let video = viewModel.videos[indexPath.row]
         
         // Load the first video picture asynchronously
         if let firstVideoPicture = video.video_pictures.first, let imageUrl = URL(string: firstVideoPicture.picture) {
@@ -107,7 +74,7 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedVideo = videos[indexPath.row]
+        let selectedVideo = viewModel.videos[indexPath.row]
         
         // Loop through video files
         for videoFile in selectedVideo.video_files {
@@ -130,7 +97,7 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     @objc func addBookmark(sender: UIButton) {
         let indexPath = IndexPath(row: sender.tag, section: 0)
-        let selectedVideo = videos[indexPath.row]
+        let selectedVideo = viewModel.videos[indexPath.row]
         
         // Download the video
         if let firstVideoFile = selectedVideo.video_files.first, let videoUrl = URL(string: firstVideoFile.link) {
@@ -167,35 +134,45 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let lastRowIndex = videos.count - 1
+        let lastRowIndex = viewModel.videos.count - 1
         // Check if the last cell is about to be displayed
         if indexPath.row == lastRowIndex {
             // Check if there are more pages to load
-            if currentPage < totalPages {
+            if viewModel.currentPage < viewModel.totalPages {
                 // Load the next page of photos
                 loadNextPage()
             }
         }
     }
     
+//    func loadNextPage() {
+//        // Increment the current page
+//        viewModel.currentPage += 1
+//        
+//        // Call the API to fetch the next page of videos
+//        networkManagerInstance.searchVideos(query: viewModel.query, perPage: viewModel.perPage, page: viewModel.currentPage) { [weak self] response in
+//            // Capture a weak reference to self to avoid strong reference cycles and check if there are new videos
+//            guard let self = self, let newVideos = response?.videos else {
+//                return
+//            }
+//            
+//            // Append the new video to the existing videos array
+//            self.viewModel.videos.append(contentsOf: newVideos)
+//            
+//            // Update UI on the main thread
+//            DispatchQueue.main.async {
+//                self.videoTableView.reloadData()
+//                self.currentpageLabel.text = "Current Page: \(self.viewModel.currentPage)"
+//            }
+//        }
+//    }
+    
     func loadNextPage() {
-        // Increment the current page
-        currentPage += 1
-        
-        // Call the API to fetch the next page of videos
-        networkManagerInstance.searchVideos(query: query, perPage: perPage, page: currentPage) { [weak self] response in
-            // Capture a weak reference to self to avoid strong reference cycles and check if there are new videos
-            guard let self = self, let newVideos = response?.videos else {
-                return
-            }
-            
-            // Append the new video to the existing videos array
-            self.videos.append(contentsOf: newVideos)
-            
+        viewModel.loadNextPage {
             // Update UI on the main thread
             DispatchQueue.main.async {
                 self.videoTableView.reloadData()
-                self.currentpageLabel.text = "Current Page: \(self.currentPage)"
+                self.currentpageLabel.text = String("Current Page: \(self.viewModel.currentPage)")
             }
         }
     }

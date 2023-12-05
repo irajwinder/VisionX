@@ -9,17 +9,15 @@ import UIKit
 import AVKit
 
 class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    var viewModel = BookmarkViewModel()
     
     @IBOutlet weak var bookmarkTableView: UITableView!
-    
-    var bookmarks: [Bookmark] = []
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         // Fetch bookmarks from Core Data
-        let fetch = datamanagerInstance.fetchBookmark()
-        self.bookmarks = fetch
+        viewModel.fetchBookmarks()
         
         // Reload the table view data
         bookmarkTableView.reloadData()
@@ -37,12 +35,12 @@ class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return bookmarks.count
+        return viewModel.bookmarks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BookmarkCell", for: indexPath) as! BookmarkTableViewCell
-        let bookmark = bookmarks[indexPath.row]
+        let bookmark = viewModel.bookmarks[indexPath.row]
         
         // Load bookmarked image
         if let imageData = fileManagerClassInstance.loadImageDataFromFileManager(relativePath: bookmark.imageURL ?? "") {
@@ -56,7 +54,7 @@ class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedBookmark = bookmarks[indexPath.row]
+        let selectedBookmark = viewModel.bookmarks[indexPath.row]
         
         // Check if the bookmark has a video URL
         guard let videoURL = fileManagerClassInstance.loadURLFromFileManager(relativePath: selectedBookmark.videoURL ?? "") else {
@@ -81,7 +79,7 @@ class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Handle the deletion when the user swipes to delete
-            let selectedBookmark = bookmarks[indexPath.row]
+            let selectedBookmark = viewModel.bookmarks[indexPath.row]
             
             // Delete the corresponding image file from the file manager
             if let imageURL = selectedBookmark.imageURL {
@@ -97,7 +95,7 @@ class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
             datamanagerInstance.deleteEntity(selectedBookmark)
             
             // Remove the bookmark from the local array
-            bookmarks.remove(at: indexPath.row)
+            viewModel.bookmarks.remove(at: indexPath.row)
             
             // Update the table view
             tableView.deleteRows(at: [indexPath], with: .fade)

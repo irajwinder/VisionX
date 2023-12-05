@@ -8,6 +8,7 @@
 import UIKit
 
 class SearchVideoVC: UIViewController {
+    var viewModel = VideoViewModel()
     
     @IBOutlet weak var videoText: UITextField!
     @IBOutlet weak var perPageSlider: UISlider!
@@ -43,9 +44,9 @@ class SearchVideoVC: UIViewController {
             }
             DispatchQueue.main.async {
                 let showImagesVC = self.storyboard?.instantiateViewController(withIdentifier: "ShowVideosVC") as! ShowVideosVC
-                showImagesVC.videos = response.videos
-                showImagesVC.query = query
-                showImagesVC.response = response
+                showImagesVC.viewModel.videos = response.videos
+                showImagesVC.viewModel.query = query
+                showImagesVC.viewModel.response = response
                 self.navigationController?.pushViewController(showImagesVC, animated: true)
             }
         }

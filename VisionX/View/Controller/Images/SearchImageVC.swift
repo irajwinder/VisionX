@@ -8,7 +8,7 @@
 import UIKit
                                
 class SearchImageVC: UIViewController {
-    var viewModel = SearchImageViewModel()
+    var viewModel = ImageViewModel()
     
     @IBOutlet weak var imageText: UITextField!
     @IBOutlet weak var perpageSlider: UISlider!

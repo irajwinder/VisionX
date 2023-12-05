@@ -8,7 +8,7 @@
 import UIKit
 
 class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate  {
-    var viewModel = SearchImageViewModel()
+    var viewModel = ImageViewModel()
     
     @IBOutlet weak var currentpageLabel: UILabel!
     @IBOutlet weak var totalPagesLabel: UILabel!
@@ -71,8 +71,6 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     }
     
     @objc func addBookmark(sender: UIButton) {
-        
-        //move it in a function
         let indexPath = IndexPath(row: sender.tag, section: 0)
         let selectedPhoto = viewModel.photos[indexPath.row]
         
@@ -86,7 +84,6 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                         // Save image link to CoreData
                         DispatchQueue.main.async {
                             datamanagerInstance.saveBookmark(imageURL: relativePath, videoURL: "")
-                            
                             // Show alert on the main thread
                             Validation.showAlert(on: self, with: "Success", message: "Image Bookmarked Successfully.")
                         }
@@ -98,11 +95,24 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         }
     }
     
+//    @objc func addBookmark(sender: UIButton) {
+//        let indexPath = IndexPath(row: sender.tag, section: 0)
+//        let selectedPhoto = viewModel.photos[indexPath.row]
+//        
+//        viewModel.addBookmark(for: selectedPhoto) { success, message in
+//            if success {
+//                Validation.showAlert(on: self, with: "Success", message: message)
+//            } else {
+//                print(message)
+//            }
+//        }
+//    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedPhoto = viewModel.photos[indexPath.row]
         
         let showImageDetailVC = self.storyboard?.instantiateViewController(withIdentifier: "ShowImageDetailVC") as! ShowImageDetailVC
-        showImageDetailVC.selectedPhoto = selectedPhoto
+        showImageDetailVC.viewModel.selectedPhoto = selectedPhoto
         self.navigationController?.pushViewController(showImageDetailVC, animated: true)
     }
     
@@ -119,25 +129,11 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     }
     
     func loadNextPage() {
-        // Increment the current page
-        viewModel.currentPage += 1
-        
-        // Make a network request to search for photos for the next page
-        networkManagerInstance.searchPhotos(query: viewModel.query, perPage: viewModel.perPage, page: viewModel.currentPage) { [weak self] response in
-            // Capture a weak reference to self to avoid strong reference cycles
-            guard let self = self else { return }
-            
-            // Check if there are new photos
-            if let newPhotos = response?.photos {
-                // Append the new photos to the existing photos array
-                self.viewModel.photos.append(contentsOf: newPhotos)
-                // Update UI on the main thread
-                
-                //here
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                    self.currentpageLabel.text = String("Current Page: \(self.viewModel.currentPage)")
-                }
+        viewModel.loadNextPage {
+            // Update UI on the main thread
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                self.currentpageLabel.text = String("Current Page: \(self.viewModel.currentPage)")
             }
         }
     }
