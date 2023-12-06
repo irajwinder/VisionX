@@ -58,7 +58,7 @@ class VideoViewModel {
             }
         }
     }
-        
+    
     // Method to load image asynchronously
     func loadImage(for video: Video, completion: @escaping (UIImage?) -> Void) {
         if let firstVideoPicture = video.video_pictures.first, let imageUrl = URL(string: firstVideoPicture.picture) {
@@ -74,9 +74,9 @@ class VideoViewModel {
                     if let videoImageData = videoImageData, let videoImage = UIImage(data: videoImageData) {
                         // Store the downloaded image in the cache
                         networkManagerInstance.setImage(videoImage, forKey: imageUrl.absoluteString)
-                            completion(videoImage)
+                        completion(videoImage)
                     } else {
-                            completion(nil)
+                        completion(nil)
                     }
                 }
             }
