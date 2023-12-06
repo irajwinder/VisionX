@@ -38,10 +38,24 @@ class SearchVideoVC: UIViewController {
             return
         }
         
-        networkManagerInstance.searchVideos(query: query, perPage: Int(numberText)!, page: 1) { response in
+        //        networkManagerInstance.searchVideos(query: query, perPage: Int(numberText)!, page: 1) { response in
+        //            guard let response = response else {
+        //                return
+        //            }
+        //            DispatchQueue.main.async {
+        //                let showImagesVC = self.storyboard?.instantiateViewController(withIdentifier: "ShowVideosVC") as! ShowVideosVC
+        //                showImagesVC.viewModel.videos = response.videos
+        //                showImagesVC.viewModel.query = query
+        //                showImagesVC.viewModel.response = response
+        //                self.navigationController?.pushViewController(showImagesVC, animated: true)
+        //            }
+        //        }
+        
+        viewModel.searchVideos(query: query, perPage: Int(numberText)!, page: 1) { response in
             guard let response = response else {
                 return
             }
+            
             DispatchQueue.main.async {
                 let showImagesVC = self.storyboard?.instantiateViewController(withIdentifier: "ShowVideosVC") as! ShowVideosVC
                 showImagesVC.viewModel.videos = response.videos

@@ -20,18 +20,39 @@ class NetworkManager : NSObject {
     }
     
     // NSCache to store UIImage objects with NSString keys
-    private var cache = NSCache<NSString, UIImage>()
-    private let maxItemCount = 50
-   
+    var cache = NSCache<NSString, UIImage>()
+    let maxItemCount = 50
+    
     
     // Retrieve an image from the cache using a key
     func getImage(forKey key: String) -> UIImage? {
         return cache.object(forKey: key as NSString)
     }
-
+    
     // Store an image in the cache using a key
     func setImage(_ image: UIImage, forKey key: String) {
         cache.setObject(image, forKey: key as NSString)
+    }
+    
+    //    // NSCache to store NSData objects with NSString keys
+    //    var cache = NSCache<NSString, NSData>()
+    //    let maxItemCount = 50
+    //   
+    //    // Retrieve an image data from the cache using a key
+    //    func getImageData(forKey key: String) -> Data? {
+    //        if let cachedData = cache.object(forKey: key as NSString) as Data? {
+    //            return cachedData
+    //        }
+    //        return nil
+    //    }
+    //    
+    //    // Store an image in the cache using a key
+    //    func setImageData(_ imageData: Data, forKey key: String) {
+    //        cache.setObject(imageData as NSData, forKey: key as NSString)
+    //    }
+    
+    func clearImageCache() {
+        cache.removeAllObjects()
     }
     
     func searchPhotos(query: String, perPage: Int, page: Int, completion: @escaping (PhotoResponse?) -> Void) {

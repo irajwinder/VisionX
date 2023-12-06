@@ -6,8 +6,8 @@
 //
 
 import Foundation
+import UIKit
 
-//Business logic Not dependant on UI
 class ImageViewModel {
     var photos: [Photo] = []
     var response: PhotoResponse?
@@ -34,7 +34,56 @@ class ImageViewModel {
         }
     }
     
-    func loadImage(completion: @escaping () -> Void) {
+    func addBookmark(for photo: Photo, completion: @escaping (String?) -> Void) {
+        // Download the image
+        if let imageUrl = URL(string: photo.src.tiny) {
+            networkManagerInstance.downloadImage(from: imageUrl) { imageData in
+                // Check if imageData is not nil
+                if let imageData = imageData {
+                    // Save the image to the file manager
+                    if let relativePath = fileManagerClassInstance.saveImageToFileManager(imageData: imageData, photo: photo) {
+                        completion(relativePath)
+                    } else {
+                        completion(nil)
+                    }
+                }
+            }
+        }
+    }
+    
+    func loadImage(for photo: Photo, completion: @escaping (UIImage?) -> Void) {
+        // Check if the image is already in the cache
+        if let cachedImage = networkManagerInstance.getImage(forKey: photo.src.tiny) {
+            print("Image loaded from cache")
+            completion(cachedImage)
+        } else {
+            print("Downloading image from network")
+            // If not, download the image and store it in the cache
+            if let imageUrl = URL(string: photo.src.tiny) {
+                networkManagerInstance.downloadImage(from: imageUrl) { imageData in
+                    // Check if imageData is not nil and Convert data to UIImage
+                    if let imageData = imageData, let image = UIImage(data: imageData) {
+                        // Store the downloaded image in the cache
+                        networkManagerInstance.setImage(image, forKey: photo.src.tiny)
+                        // Update the cell's image on the main thread
+                        DispatchQueue.main.async {
+                            completion(image)
+                        }
+                    } else {
+                        completion(nil)
+                    }
+                }
+            }
+        }
+    }
+    
+    func searchPhotos(query: String, perPage: Int, page: Int, completion: @escaping (PhotoResponse?) -> Void) {
+        networkManagerInstance.searchPhotos(query: query, perPage: perPage, page: page) { response in
+            completion(response)
+        }
+    }
+    
+    func loadOriginalImage(completion: @escaping () -> Void) {
         guard let photo = selectedPhoto, let imageUrl = URL(string: photo.src.original) else {
             completion()
             return
@@ -47,24 +96,28 @@ class ImageViewModel {
         }
     }
     
-//    func addBookmark(for photo: Photo, completion: @escaping (Bool, String) -> Void) {
-//        // Download the image
-//        if let imageUrl = URL(string: photo.src.tiny) {
-//            networkManagerInstance.downloadImage(from: imageUrl) { imageData in
-//                // Check if imageData is not nil
-//                if let imageData = imageData {
-//                    // Save the image to the file manager
-//                    if let relativePath = fileManagerClassInstance.saveImageToFileManager(imageData: imageData, photo: photo) {
-//                        // Save image link to CoreData
-//                        DispatchQueue.main.async {
-//                            datamanagerInstance.saveBookmark(imageURL: relativePath, videoURL: "")
-//                            completion(true, "Image Bookmarked Successfully.")
-//                        }
-//                    } else {
-//                        completion(false, "Error saving image to FileManager.")
-//                    }
-//                }
-//            }
-//        }
-//    }
+    //    func loadImage(for photo: Photo, completion: @escaping (Data?) -> Void) {
+    //        // Check if the image is already in the cache
+    //        if let cachedImageData = networkManagerInstance.getImageData(forKey: photo.src.tiny) {
+    //            print("Image loaded from cache")
+    //            completion(cachedImageData)
+    //        } else {
+    //            print("Downloading image from network")
+    //            // If not, download the image and store it in the cache
+    //            if let imageUrl = URL(string: photo.src.tiny) {
+    //                networkManagerInstance.downloadImage(from: imageUrl) { imageData in
+    //                    // Check if imageData is not nil
+    //                    if let imageData = imageData {
+    //                        // Store the downloaded image data in the cache
+    //                        networkManagerInstance.setImageData(imageData, forKey: photo.src.tiny)
+    //                        // Pass the image data to the completion block
+    //                        completion(imageData)
+    //                    } else {
+    //                        completion(nil)
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+    
 }

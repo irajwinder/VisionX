@@ -16,12 +16,12 @@ class ShowImageDetailVC: UIViewController {
         super.viewDidLoad()
         
         navigationItem.title = "Image Details"
-        loadImage()
+        loadOriginalImage()
     }
     
     // Load the original image in the UIImageView
-    func loadImage() {
-        viewModel.loadImage { [weak self] in
+    func loadOriginalImage() {
+        viewModel.loadOriginalImage { [weak self] in
             if let imageData = self?.viewModel.imageData, let image = UIImage(data: imageData) {
                 // Update UI on the main thread
                 DispatchQueue.main.async {

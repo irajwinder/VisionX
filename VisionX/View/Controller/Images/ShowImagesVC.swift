@@ -14,6 +14,13 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     @IBOutlet weak var totalPagesLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        // Clear image cache when leaving the ShowImagesVC
+        networkManagerInstance.clearImageCache()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -43,27 +50,26 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         let cell = tableView.dequeueReusableCell(withIdentifier: "ImageCell", for: indexPath) as! ImagesTableViewCell
         let photo = viewModel.photos[indexPath.row]
         
-        // Check if the image is already in the cache
-        if let cachedImage = networkManagerInstance.getImage(forKey: photo.src.tiny) {
-            print("Image loaded from cache")
-            cell.ImagesCell.image = cachedImage
-        } else {
-            print("Downloading image from network")
-            // If not, download the image and store it in the cache
-            if let imageUrl = URL(string: photo.src.tiny) {
-                networkManagerInstance.downloadImage(from: imageUrl) { imageData in
-                    // Check if imageData is not nil and Convert data to UIImage
-                    if let imageData = imageData, let image = UIImage(data: imageData) {
-                        // Store the downloaded image in the cache
-                        networkManagerInstance.setImage(image, forKey: photo.src.tiny)
-                        // Update the cell's image on the main thread
-                        DispatchQueue.main.async {
-                            cell.ImagesCell.image = image
-                        }
-                    }
-                }
+        viewModel.loadImage(for: photo) { image in
+            // Set the image on the cell's image view
+            DispatchQueue.main.async {
+                cell.ImagesCell.image = image
             }
         }
+        
+        //        viewModel.loadImage(for: photo) { imageData in
+        //            // Check if imageData is not nil
+        //            if let imageData = imageData {
+        //                // Convert the image data to UIImage (if needed)
+        //                if let image = UIImage(data: imageData) {
+        //                    // Set the image on the cell's image view
+        //                    DispatchQueue.main.async {
+        //                        cell.ImagesCell.image = image
+        //                    }
+        //                }
+        //            }
+        //        }
+        
         cell.imageBookmark.tag = indexPath.row
         cell.imageBookmark.addTarget(self, action: #selector(addBookmark), for: .touchUpInside)
         
@@ -74,39 +80,19 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         let indexPath = IndexPath(row: sender.tag, section: 0)
         let selectedPhoto = viewModel.photos[indexPath.row]
         
-        // Download the image
-        if let imageUrl = URL(string: selectedPhoto.src.tiny) {
-            networkManagerInstance.downloadImage(from: imageUrl) { imageData in
-                // Check if imageData is not nil
-                if let imageData = imageData {
-                    // Save the image to the file manager
-                    if let relativePath = fileManagerClassInstance.saveImageToFileManager(imageData: imageData, photo: selectedPhoto) {
-                        // Save image link to CoreData
-                        DispatchQueue.main.async {
-                            datamanagerInstance.saveBookmark(imageURL: relativePath, videoURL: "")
-                            // Show alert on the main thread
-                            Validation.showAlert(on: self, with: "Success", message: "Image Bookmarked Successfully.")
-                        }
-                    } else {
-                        print("Error saving image to FileManager.")
-                    }
+        viewModel.addBookmark(for: selectedPhoto) { relativePath in
+            // Check if relativePath is not nil
+            if let relativePath = relativePath {
+                DispatchQueue.main.async {
+                    // Save image link to CoreData
+                    datamanagerInstance.saveBookmark(imageURL: relativePath, videoURL: "")
+                    Validation.showAlert(on: self, with: "Success", message: "Image Bookmarked Successfully.")
                 }
+            } else {
+                print("Error saving image to FileManager.")
             }
         }
     }
-    
-//    @objc func addBookmark(sender: UIButton) {
-//        let indexPath = IndexPath(row: sender.tag, section: 0)
-//        let selectedPhoto = viewModel.photos[indexPath.row]
-//        
-//        viewModel.addBookmark(for: selectedPhoto) { success, message in
-//            if success {
-//                Validation.showAlert(on: self, with: "Success", message: message)
-//            } else {
-//                print(message)
-//            }
-//        }
-//    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedPhoto = viewModel.photos[indexPath.row]
