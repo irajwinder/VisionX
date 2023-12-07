@@ -7,27 +7,22 @@
 
 import UIKit
 
-class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate  {
+class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, LoadNextPageDelegate,BookmarkDelegate, ImageLoadingDelegate {
     var viewModel = ImageViewModel()
     
     @IBOutlet weak var currentpageLabel: UILabel!
     @IBOutlet weak var totalPagesLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // Clear image cache when leaving the ShowImagesVC
-        cacheManagerInstance.clearImageCache()
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         navigationItem.title = "Images"
         
         tableView.dataSource = self
         tableView.delegate = self
+        viewModel.delegate = self
+        viewModel.bookmarkDelegate = self
+        viewModel.imageLoadingDelegate = self
         
         guard let response = viewModel.response else {
             return
@@ -50,18 +45,7 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         let cell = tableView.dequeueReusableCell(withIdentifier: "ImageCell", for: indexPath) as! ImagesTableViewCell
         let photo = viewModel.photos[indexPath.row]
         
-        viewModel.loadImage(for: photo) { imageData in
-            // Check if imageData is not nil
-            if let imageData = imageData {
-                // Convert the image data to UIImage (if needed)
-                if let image = UIImage(data: imageData) {
-                    // Set the image on the cell's image view
-                    DispatchQueue.main.async {
-                        cell.ImagesCell.image = image
-                    }
-                }
-            }
-        }
+        viewModel.loadImage(for: photo, at: indexPath)
         cell.imageBookmark.tag = indexPath.row
         cell.imageBookmark.addTarget(self, action: #selector(addBookmark), for: .touchUpInside)
         
@@ -72,18 +56,7 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         let indexPath = IndexPath(row: sender.tag, section: 0)
         let selectedPhoto = viewModel.photos[indexPath.row]
         
-        viewModel.addBookmark(for: selectedPhoto) { relativePath in
-            // Check if relativePath is not nil
-            if let relativePath = relativePath {
-                DispatchQueue.main.async {
-                    // Save image link to CoreData
-                    datamanagerInstance.saveBookmark(imageURL: relativePath, videoURL: "")
-                    Validation.showAlert(on: self, with: "Success", message: "Image Bookmarked Successfully.")
-                }
-            } else {
-                print("Error saving image to FileManager.")
-            }
-        }
+        viewModel.addBookmark(selectedPhoto)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -101,17 +74,38 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
             // Check if there are more pages to load
             if viewModel.currentPage < viewModel.totalPages {
                 // Load the next page of photos
-                loadNextPage()
+                viewModel.loadNextPage()
             }
         }
     }
     
-    func loadNextPage() {
-        viewModel.loadNextPage {
-            // Update UI on the main thread
+    func didAddBookmark(_ relativePath: String?) {
+        // Check if relativePath is not nil
+        if let relativePath = relativePath {
             DispatchQueue.main.async {
-                self.tableView.reloadData()
-                self.currentpageLabel.text = String("Current Page: \(self.viewModel.currentPage)")
+                // Save image link to CoreData
+                datamanagerInstance.saveBookmark(imageURL: relativePath, videoURL: "")
+                Validation.showAlert(on: self, with: "Success", message: "Image Bookmarked Successfully.")
+            }
+        } else {
+            print("Error saving image to FileManager.")
+        }
+    }
+    
+    func didLoadNextPage() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+            self.currentpageLabel.text = String("Current Page: \(self.viewModel.currentPage)")
+        }
+    }
+    
+    func didLoadImageData(_ imageData: Data?, _ indexPath: IndexPath) {
+        guard let imageData = imageData else { return }
+        // Convert the image data to UIImage
+        let image = UIImage(data: imageData)
+        DispatchQueue.main.async {
+            if let cell = self.tableView.cellForRow(at: indexPath) as? ImagesTableViewCell {
+                cell.ImagesCell.image = image
             }
         }
     }

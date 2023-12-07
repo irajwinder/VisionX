@@ -24,19 +24,12 @@ class CacheManager: NSObject {
     
     // Retrieve an image data from the cache using a key
     func getImageData(forKey key: String) -> Data? {
-        if let cachedData = cache.object(forKey: key as NSString) as Data? {
-            return cachedData
-        }
-        return nil
+        return cache.object(forKey: key as NSString) as? Data
     }
     
     // Store an image in the cache using a key
     func setImageData(_ imageData: Data, forKey key: String) {
         cache.setObject(imageData as NSData, forKey: key as NSString)
-    }
-    
-    func clearImageCache() {
-        cache.removeAllObjects()
     }
 }
 

@@ -7,7 +7,7 @@
 
 import UIKit
                                
-class SearchImageVC: UIViewController {
+class SearchImageVC: UIViewController, PhotoSearchDelegate {
     var viewModel = ImageViewModel()
     
     @IBOutlet weak var imageText: UITextField!
@@ -23,6 +23,7 @@ class SearchImageVC: UIViewController {
         
         // Set initial value for numberLabel
         numberLabel.text = "\(Int(perpageSlider.value))"
+        viewModel.photoSearchDelegate = self
     }
     
     @IBAction func sliderValueChanged(_ sender: Any) {
@@ -41,18 +42,20 @@ class SearchImageVC: UIViewController {
             return
         }
         
-        viewModel.searchPhotos(query: query, perPage: Int(numberLabel)!, page: 1) { response in
-            guard let response = response else {
-                return
-            }
-            
-            DispatchQueue.main.async {
-                let showImagesVC = self.storyboard?.instantiateViewController(withIdentifier: "ShowImagesVC") as! ShowImagesVC
-                showImagesVC.viewModel.photos = response.photos
-                showImagesVC.viewModel.query = query
-                showImagesVC.viewModel.response = response
-                self.navigationController?.pushViewController(showImagesVC, animated: true)
-            }
+        viewModel.searchPhotos(query: query, perPage: Int(numberLabel)!, page: 1)
+    }
+    
+    func didSearchPhotos(_ response: PhotoResponse?) {
+        guard let response = response else {
+            return
+        }
+        
+        DispatchQueue.main.async {
+            let showImagesVC = self.storyboard?.instantiateViewController(withIdentifier: "ShowImagesVC") as! ShowImagesVC
+            showImagesVC.viewModel.photos = response.photos
+            showImagesVC.viewModel.query = self.imageText.text ?? ""
+            showImagesVC.viewModel.response = response
+            self.navigationController?.pushViewController(showImagesVC, animated: true)
         }
     }
 }

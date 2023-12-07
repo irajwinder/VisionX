@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ShowImageDetailVC: UIViewController {
+class ShowImageDetailVC: UIViewController, LoadOriginalImageDelegate {
     var viewModel = ImageViewModel()
     
     @IBOutlet weak var originalImage: UIImageView!
@@ -16,17 +16,15 @@ class ShowImageDetailVC: UIViewController {
         super.viewDidLoad()
         
         navigationItem.title = "Image Details"
-        loadOriginalImage()
+        viewModel.loadOriginalImageDelegate = self
+        viewModel.loadOriginalImage()
     }
     
-    // Load the original image in the UIImageView
-    func loadOriginalImage() {
-        viewModel.loadOriginalImage { [weak self] in
-            if let imageData = self?.viewModel.imageData, let image = UIImage(data: imageData) {
-                // Update UI on the main thread
-                DispatchQueue.main.async {
-                    self?.originalImage.image = image
-                }
+    func didLoadOriginalImage() {
+        if let imageData = self.viewModel.imageData, let image = UIImage(data: imageData) {
+            // Update UI on the main thread
+            DispatchQueue.main.async {
+                self.originalImage.image = image
             }
         }
     }

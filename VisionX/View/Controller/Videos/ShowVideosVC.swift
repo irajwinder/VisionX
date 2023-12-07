@@ -7,18 +7,12 @@
 
 import UIKit
 
-class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate, LoadNextPageDelegate, LoadNextVideosPageDelegate, VideoBookmarkDelegate, VideoImageLoadingDelegate {
     var viewModel = VideoViewModel()
     
     @IBOutlet weak var currentpageLabel: UILabel!
     @IBOutlet weak var totalPagesLabel: UILabel!
     @IBOutlet weak var videoTableView: UITableView!
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        // Clear image cache when leaving the ShowVideosVC
-        cacheManagerInstance.clearImageCache()
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +21,9 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         videoTableView.dataSource = self
         videoTableView.delegate = self
+        viewModel.loadNextVideosPageDelegate = self
+        viewModel.videoBookmarkDelegate = self
+        viewModel.videoImageLoadingDelegate = self
         
         guard let response = viewModel.response else {
             return
@@ -50,18 +47,7 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         // Get the video data for the current row
         let video = viewModel.videos[indexPath.row]
         
-        viewModel.loadImage(for: video) { imageData in
-            // Check if imageData is not nil
-            if let imageData = imageData {
-                // Convert the image data to UIImage
-                if let image = UIImage(data: imageData) {
-                    // Set the image on the cell's image view
-                    DispatchQueue.main.async {
-                        cell.VideosCell.image = image
-                    }
-                }
-            }
-        }
+        viewModel.loadImage(for: video, at: indexPath)
         cell.VideosBookmark.tag = indexPath.row
         cell.VideosBookmark.addTarget(self, action: #selector(addBookmark), for: .touchUpInside)
         
@@ -82,18 +68,7 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         let indexPath = IndexPath(row: sender.tag, section: 0)
         let selectedVideo = viewModel.videos[indexPath.row]
         
-        viewModel.addBookmark(for: selectedVideo) { imageURL, videoURL in
-            // Check if imageURL and videoURL is not nil
-            if let imageURL = imageURL, let videoURL = videoURL {
-                DispatchQueue.main.async {
-                    // Save image and video link to CoreData
-                    datamanagerInstance.saveBookmark(imageURL: imageURL, videoURL: videoURL)
-                    Validation.showAlert(on: self, with: "Success", message: "Video Bookmarked Successfully.")
-                }
-            } else {
-                print("Error saving video or image to FileManager.")
-            }
-        }
+        viewModel.addBookmark(for: selectedVideo)
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -103,17 +78,39 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
             // Check if there are more pages to load
             if viewModel.currentPage < viewModel.totalPages {
                 // Load the next page of photos
-                loadNextPage()
+                viewModel.loadNextPage()
             }
         }
     }
     
-    func loadNextPage() {
-        viewModel.loadNextPage {
-            // Update UI on the main thread
+    func didLoadNextPage() {
+        // Update UI on the main thread
+        DispatchQueue.main.async {
+            self.videoTableView.reloadData()
+            self.currentpageLabel.text = String("Current Page: \(self.viewModel.currentPage)")
+        }
+    }
+    
+    func didAddBookmark(_ imageURL: String?, _ videoURL: String?) {
+        // Check if imageURL and videoURL is not nil
+        if let imageURL = imageURL, let videoURL = videoURL {
             DispatchQueue.main.async {
-                self.videoTableView.reloadData()
-                self.currentpageLabel.text = String("Current Page: \(self.viewModel.currentPage)")
+                // Save image and video link to CoreData
+                datamanagerInstance.saveBookmark(imageURL: imageURL, videoURL: videoURL)
+                Validation.showAlert(on: self, with: "Success", message: "Video Bookmarked Successfully.")
+            }
+        } else {
+            print("Error saving video or image to FileManager.")
+        }
+    }
+    
+    func didLoadImageData(_ imageData: Data?, _ indexPath: IndexPath) {
+        guard let imageData = imageData else { return }
+        // Convert the image data to UIImage
+        let image = UIImage(data: imageData)
+        DispatchQueue.main.async {
+            if let cell = self.videoTableView.cellForRow(at: indexPath) as? VideosTableViewCell {
+                cell.VideosCell.image = image
             }
         }
     }

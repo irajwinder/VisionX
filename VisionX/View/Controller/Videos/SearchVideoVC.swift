@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SearchVideoVC: UIViewController {
+class SearchVideoVC: UIViewController, VideoSearchDelegate {
     var viewModel = VideoViewModel()
     
     @IBOutlet weak var videoText: UITextField!
@@ -21,6 +21,7 @@ class SearchVideoVC: UIViewController {
         
         // Set initial value for numberLabel
         numberText.text = "\(Int(perPageSlider.value))"
+        viewModel.videoSearchDelegate = self
     }
     
     @IBAction func sliderValueChanged(_ sender: Any) {
@@ -38,18 +39,20 @@ class SearchVideoVC: UIViewController {
             return
         }
         
-        viewModel.searchVideos(query: query, perPage: Int(numberText)!, page: 1) { response in
-            guard let response = response else {
-                return
-            }
-            
-            DispatchQueue.main.async {
-                let showImagesVC = self.storyboard?.instantiateViewController(withIdentifier: "ShowVideosVC") as! ShowVideosVC
-                showImagesVC.viewModel.videos = response.videos
-                showImagesVC.viewModel.query = query
-                showImagesVC.viewModel.response = response
-                self.navigationController?.pushViewController(showImagesVC, animated: true)
-            }
+        viewModel.searchVideos(query: query, perPage: Int(numberText)!, page: 1)
+    }
+    
+    func didSearchVideos(_ response: VideoResponse?) {
+        guard let response = response else {
+            return
+        }
+        
+        DispatchQueue.main.async {
+            let showImagesVC = self.storyboard?.instantiateViewController(withIdentifier: "ShowVideosVC") as! ShowVideosVC
+            showImagesVC.viewModel.videos = response.videos
+            showImagesVC.viewModel.query = self.videoText.text ?? ""
+            showImagesVC.viewModel.response = response
+            self.navigationController?.pushViewController(showImagesVC, animated: true)
         }
     }
 }
