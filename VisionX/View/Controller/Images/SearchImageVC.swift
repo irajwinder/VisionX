@@ -16,7 +16,6 @@ class SearchImageVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         navigationItem.title = "Search Photos"
         
         let paths = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.documentDirectory, FileManager.SearchPathDomainMask.userDomainMask, true)
@@ -55,19 +54,5 @@ class SearchImageVC: UIViewController {
                 self.navigationController?.pushViewController(showImagesVC, animated: true)
             }
         }
-        
-        //        networkManagerInstance.searchPhotos(query: query, perPage: Int(numberLabel)!, page: 1) { response in
-        //            guard let response = response else {
-        //                return
-        //            }
-        //
-        //            DispatchQueue.main.async {
-        //                let showImagesVC = self.storyboard?.instantiateViewController(withIdentifier: "ShowImagesVC") as! ShowImagesVC
-        //                showImagesVC.viewModel.photos = response.photos
-        //                showImagesVC.viewModel.query = query
-        //                showImagesVC.viewModel.response = response
-        //                self.navigationController?.pushViewController(showImagesVC, animated: true)
-        //            }
-        //        }
     }
 }

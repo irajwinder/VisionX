@@ -18,7 +18,6 @@ class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         
         // Fetch bookmarks from Core Data
         viewModel.fetchBookmarks()
-        
         // Reload the table view data
         bookmarkTableView.reloadData()
     }
@@ -43,7 +42,7 @@ class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         let bookmark = viewModel.bookmarks[indexPath.row]
         
         // Load bookmarked image
-        if let imageData = fileManagerClassInstance.loadImageDataFromFileManager(relativePath: bookmark.imageURL ?? "") {
+        if let imageData = viewModel.loadImageData(forBookmark: bookmark) {
             let uiImage = UIImage(data: imageData)
             cell.BookmarksCell.image = uiImage
         } else {
@@ -56,24 +55,11 @@ class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedBookmark = viewModel.bookmarks[indexPath.row]
         
-        // Check if the bookmark has a video URL
-        guard let videoURL = fileManagerClassInstance.loadURLFromFileManager(relativePath: selectedBookmark.videoURL ?? "") else {
-            // Handle the case when there is no video URL
+        guard let videoURL = viewModel.videoURL(forBookmark: selectedBookmark) else {
             return
         }
-        
-        // Check if the video is playable
-        if AVURLAsset(url: videoURL).isPlayable {
-            // Create an AVPlayer with the video URL
-            let player = AVPlayer(url: videoURL)
-            let playerViewController = AVPlayerViewController()
-            playerViewController.player = player
-            
-            // Present the AVPlayerViewController and start playing the video
-            present(playerViewController, animated: true) {
-                player.play()
-            }
-        }
+        // Use the VideoManager to play the video
+        videoManagerInstance.playVideo(videoURL: videoURL, viewController: self)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -81,22 +67,9 @@ class BookmarkVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
             // Handle the deletion when the user swipes to delete
             let selectedBookmark = viewModel.bookmarks[indexPath.row]
             
-            // Delete the corresponding image file from the file manager
-            if let imageURL = selectedBookmark.imageURL {
-                fileManagerClassInstance.deleteImageFromFileManager(relativePath: imageURL)
-            }
-            
-            // Delete the corresponding video file from the file manager
-            if let bookmarkVideoURL = selectedBookmark.videoURL, !bookmarkVideoURL.isEmpty {
-                fileManagerClassInstance.deleteImageFromFileManager(relativePath: bookmarkVideoURL)
-            }
-            
-            // Delete the bookmark entity from Core Data
-            datamanagerInstance.deleteEntity(selectedBookmark)
-            
+            viewModel.deleteBookmark(forBookmark: selectedBookmark)
             // Remove the bookmark from the local array
             viewModel.bookmarks.remove(at: indexPath.row)
-            
             // Update the table view
             tableView.deleteRows(at: [indexPath], with: .fade)
         }

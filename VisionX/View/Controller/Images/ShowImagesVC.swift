@@ -18,7 +18,7 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // Clear image cache when leaving the ShowImagesVC
-        networkManagerInstance.clearImageCache()
+        cacheManagerInstance.clearImageCache()
     }
     
     override func viewDidLoad() {
@@ -50,26 +50,18 @@ class ShowImagesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         let cell = tableView.dequeueReusableCell(withIdentifier: "ImageCell", for: indexPath) as! ImagesTableViewCell
         let photo = viewModel.photos[indexPath.row]
         
-        viewModel.loadImage(for: photo) { image in
-            // Set the image on the cell's image view
-            DispatchQueue.main.async {
-                cell.ImagesCell.image = image
+        viewModel.loadImage(for: photo) { imageData in
+            // Check if imageData is not nil
+            if let imageData = imageData {
+                // Convert the image data to UIImage (if needed)
+                if let image = UIImage(data: imageData) {
+                    // Set the image on the cell's image view
+                    DispatchQueue.main.async {
+                        cell.ImagesCell.image = image
+                    }
+                }
             }
         }
-        
-        //        viewModel.loadImage(for: photo) { imageData in
-        //            // Check if imageData is not nil
-        //            if let imageData = imageData {
-        //                // Convert the image data to UIImage (if needed)
-        //                if let image = UIImage(data: imageData) {
-        //                    // Set the image on the cell's image view
-        //                    DispatchQueue.main.async {
-        //                        cell.ImagesCell.image = image
-        //                    }
-        //                }
-        //            }
-        //        }
-        
         cell.imageBookmark.tag = indexPath.row
         cell.imageBookmark.addTarget(self, action: #selector(addBookmark), for: .touchUpInside)
         

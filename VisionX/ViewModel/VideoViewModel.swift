@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UIKit
 
 class VideoViewModel {
     var videos: [Video] = []
@@ -60,21 +59,22 @@ class VideoViewModel {
     }
     
     // Method to load image asynchronously
-    func loadImage(for video: Video, completion: @escaping (UIImage?) -> Void) {
+    func loadImage(for video: Video, completion: @escaping (Data?) -> Void) {
         if let firstVideoPicture = video.video_pictures.first, let imageUrl = URL(string: firstVideoPicture.picture) {
             // Check if the image is already in the cache
-            if let cachedImage = networkManagerInstance.getImage(forKey: imageUrl.absoluteString) {
+            if let cachedImageData = cacheManagerInstance.getImageData(forKey: imageUrl.absoluteString) {
                 print("Image loaded from cache")
-                completion(cachedImage)
+                completion(cachedImageData)
             } else {
                 print("Downloading image from network")
                 // If not, download the image and store it in the cache
                 networkManagerInstance.downloadImage(from: imageUrl) { videoImageData in
-                    // Check if videoImageData is not nil and convert data to UIImage
-                    if let videoImageData = videoImageData, let videoImage = UIImage(data: videoImageData) {
+                    // Check if videoImageData is not nil
+                    if let videoImageData = videoImageData {
                         // Store the downloaded image in the cache
-                        networkManagerInstance.setImage(videoImage, forKey: imageUrl.absoluteString)
-                        completion(videoImage)
+                        cacheManagerInstance.setImageData(videoImageData, forKey: imageUrl.absoluteString)
+                        // Pass the image data to the completion block
+                        completion(videoImageData)
                     } else {
                         completion(nil)
                     }

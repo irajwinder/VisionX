@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import AVKit
 
 class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     var viewModel = VideoViewModel()
@@ -18,7 +17,7 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         // Clear image cache when leaving the ShowVideosVC
-        networkManagerInstance.clearImageCache()
+        cacheManagerInstance.clearImageCache()
     }
     
     override func viewDidLoad() {
@@ -51,34 +50,18 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         // Get the video data for the current row
         let video = viewModel.videos[indexPath.row]
         
-        viewModel.loadImage(for: video) { image in
-            // Set the cell's image on the main thread
-            DispatchQueue.main.async {
-                cell.VideosCell.image = image
+        viewModel.loadImage(for: video) { imageData in
+            // Check if imageData is not nil
+            if let imageData = imageData {
+                // Convert the image data to UIImage
+                if let image = UIImage(data: imageData) {
+                    // Set the image on the cell's image view
+                    DispatchQueue.main.async {
+                        cell.VideosCell.image = image
+                    }
+                }
             }
         }
-        //        // Load the first video picture asynchronously
-        //        if let firstVideoPicture = video.video_pictures.first, let imageUrl = URL(string: firstVideoPicture.picture) {
-        //            // Check if the image is already in the cache
-        //            if let cachedImage = networkManagerInstance.getImage(forKey: imageUrl.absoluteString) {
-        //                print("Image loaded from cache")
-        //                cell.VideosCell.image = cachedImage
-        //            } else {
-        //                print("Downloading image from network")
-        //                // If not, download the image and store it in the cache
-        //                networkManagerInstance.downloadImage(from: imageUrl) { videoImageData in
-        //                    // Check if videoImageData is not nil and Convert data to UIImage
-        //                    if let videoImageData = videoImageData, let videoImage = UIImage(data: videoImageData) {
-        //                        // Store the downloaded image in the cache
-        //                        networkManagerInstance.setImage(videoImage, forKey: imageUrl.absoluteString)
-        //                        // Update the cell's image on the main thread
-        //                        DispatchQueue.main.async {
-        //                            cell.VideosCell.image = videoImage
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
         cell.VideosBookmark.tag = indexPath.row
         cell.VideosBookmark.addTarget(self, action: #selector(addBookmark), for: .touchUpInside)
         
@@ -88,22 +71,10 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedVideo = viewModel.videos[indexPath.row]
         
-        // Loop through video files
-        for videoFile in selectedVideo.video_files {
-            let videoURL = URL(string: videoFile.link)
-            
-            // Check if the videoURL is valid
-            if let videoURL = videoURL {
-                // Create an AVPlayer with the video URL
-                let player = AVPlayer(url: videoURL)
-                let playerViewController = AVPlayerViewController()
-                playerViewController.player = player
-                
-                // Present the AVPlayerViewController and start playing the video
-                present(playerViewController, animated: true) {
-                    player.play()
-                }
-            }
+        if let firstVideoFile = selectedVideo.video_files.first,
+           let videoURL = URL(string: firstVideoFile.link) {
+            // Call the playVideo method from the VideoPlayer class
+            videoManagerInstance.playVideo(videoURL: videoURL, viewController: self)
         }
     }
     
@@ -123,39 +94,6 @@ class ShowVideosVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                 print("Error saving video or image to FileManager.")
             }
         }
-        
-        //        // Download the video
-        //        if let firstVideoFile = selectedVideo.video_files.first, let videoUrl = URL(string: firstVideoFile.link) {
-        //            networkManagerInstance.downloadImage(from: videoUrl) { videoData in
-        //                // Check if videoData is not nil
-        //                if let videoData = videoData {
-        //                    // Load the first video picture
-        //                    if let firstVideoPicture = selectedVideo.video_pictures.first,
-        //                       let imageUrl = URL(string: firstVideoPicture.picture) {
-        //
-        //                        networkManagerInstance.downloadImage(from: imageUrl) { videoImageData in
-        //                            // Check if videoImageData is not nil
-        //                            if let videoImageData = videoImageData {
-        //                                // Save the video and image to the file manager
-        //                                let urls = fileManagerClassInstance.saveVideoToFileManager(videoData: videoData, video: selectedVideo, videoImage: videoImageData)
-        //
-        //                                if let videoURL = urls.videoURL, let imageURL = urls.imageURL {
-        //                                    // Save video and image links to CoreData
-        //                                    DispatchQueue.main.async {
-        //                                        datamanagerInstance.saveBookmark(imageURL: imageURL, videoURL: videoURL)
-        //
-        //                                        // Show alert on the main thread
-        //                                        Validation.showAlert(on: self, with: "Success", message: "Video Bookmarked Successfully.")
-        //                                    }
-        //                                } else {
-        //                                    print("Error saving video or image to FileManager.")
-        //                                }
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

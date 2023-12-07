@@ -20,6 +20,8 @@
 		A214320A2B0CE4A600DE8DE3 /* FileManagerClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A21432092B0CE4A600DE8DE3 /* FileManagerClass.swift */; };
 		A214320C2B0CE52F00DE8DE3 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A214320B2B0CE52F00DE8DE3 /* DataManager.swift */; };
 		A21432102B0CE76400DE8DE3 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A214320F2B0CE76400DE8DE3 /* Photo.swift */; };
+		A233A8882B215B480024D285 /* VideoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A233A8872B215B480024D285 /* VideoManager.swift */; };
+		A233A88A2B2160980024D285 /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A233A8892B2160980024D285 /* CacheManager.swift */; };
 		A26C8D7F2B1D7BA000B1DF7B /* ImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A26C8D7E2B1D7BA000B1DF7B /* ImageViewModel.swift */; };
 		A27D91842B1E748200278B70 /* ShowImageDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27D91832B1E748200278B70 /* ShowImageDetailVC.swift */; };
 		A27D91862B1EB0BE00278B70 /* VideoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27D91852B1EB0BE00278B70 /* VideoViewModel.swift */; };
@@ -53,6 +55,8 @@
 		A21432092B0CE4A600DE8DE3 /* FileManagerClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileManagerClass.swift; sourceTree = "<group>"; };
 		A214320B2B0CE52F00DE8DE3 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		A214320F2B0CE76400DE8DE3 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
+		A233A8872B215B480024D285 /* VideoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoManager.swift; sourceTree = "<group>"; };
+		A233A8892B2160980024D285 /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		A26C8D7E2B1D7BA000B1DF7B /* ImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewModel.swift; sourceTree = "<group>"; };
 		A27D91832B1E748200278B70 /* ShowImageDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowImageDetailVC.swift; sourceTree = "<group>"; };
 		A27D91852B1EB0BE00278B70 /* VideoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewModel.swift; sourceTree = "<group>"; };
@@ -136,6 +140,7 @@
 			children = (
 				A21432092B0CE4A600DE8DE3 /* FileManagerClass.swift */,
 				A214320B2B0CE52F00DE8DE3 /* DataManager.swift */,
+				A233A8872B215B480024D285 /* VideoManager.swift */,
 				A2C7A8822B153D7800CA5A28 /* Constants.swift */,
 				A2C7A8842B1558B900CA5A28 /* Validation.swift */,
 			);
@@ -166,6 +171,7 @@
 			children = (
 				A20CAA602B0E6FDB00BB2622 /* NetworkManager.swift */,
 				A20CAA622B0E6FF200BB2622 /* APIManager.swift */,
+				A233A8892B2160980024D285 /* CacheManager.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -318,12 +324,14 @@
 				A27D91842B1E748200278B70 /* ShowImageDetailVC.swift in Sources */,
 				A21431E02B0C52CF00DE8DE3 /* AppDelegate.swift in Sources */,
 				A2DC63822B16A0DE0080A94F /* BookmarkVC.swift in Sources */,
+				A233A88A2B2160980024D285 /* CacheManager.swift in Sources */,
 				A21432062B0C565200DE8DE3 /* SearchVideoVC.swift in Sources */,
 				A27D91862B1EB0BE00278B70 /* VideoViewModel.swift in Sources */,
 				A2C7A8832B153D7800CA5A28 /* Constants.swift in Sources */,
 				A2F1A2B52B14EB5500E91A6E /* SearchImageVC.swift in Sources */,
 				A2F1DCC12B18C166007F9137 /* BookmarkTableViewCell.swift in Sources */,
 				A2C7A8852B1558B900CA5A28 /* Validation.swift in Sources */,
+				A233A8882B215B480024D285 /* VideoManager.swift in Sources */,
 				A2F1DCC52B198107007F9137 /* Bookmark+CoreDataProperties.swift in Sources */,
 				A2F9EFA72B0E49C600055DE1 /* Video.swift in Sources */,
 				A2F1DCC42B198107007F9137 /* Bookmark+CoreDataClass.swift in Sources */,
